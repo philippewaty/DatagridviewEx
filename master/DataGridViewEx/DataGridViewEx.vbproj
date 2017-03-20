@@ -116,6 +116,7 @@
     <Compile Include="DataGridViewPasswordTextBoxColumn.vb" />
     <Compile Include="DataGridViewProgressCell.vb" />
     <Compile Include="DataGridViewProgressColumn.vb" />
+    <Compile Include="ExportSettings.vb" />
     <Compile Include="FormColumnsConfig.Designer.vb">
       <DependentUpon>FormColumnsConfig.vb</DependentUpon>
     </Compile>

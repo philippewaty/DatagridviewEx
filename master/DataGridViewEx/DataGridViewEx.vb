@@ -277,6 +277,18 @@ Public Class DataGridViewEx
     End Set
   End Property
 
+  Private _ExportSettings As ExportSettings = New ExportSettings
+  <Browsable(True), Category("Misc"), Description("Sets the settings for export and printing the DataGridView")>
+  Public Property ExportSettings() As ExportSettings
+    Get
+      If _ExportSettings Is Nothing Then _ExportSettings = New ExportSettings
+      Return _ExportSettings
+    End Get
+    Set(ByVal value As ExportSettings)
+      If _ExportSettings Is Nothing Then _ExportSettings = New ExportSettings
+      _ExportSettings = value
+    End Set
+  End Property
 #End Region
 
 #Region "Public methods"
@@ -1089,7 +1101,7 @@ Public Class DataGridViewEx
             ElseIf TypeOf (Me.Rows(row).Cells(col)) Is DataGridViewProgressCell Then
               writer.Write(Me.Rows(row).Cells(col).Value)
 
-              Dim cellImage As Image = DirectCast(Me.Rows(row).Cells(col).FormattedValue, Image)
+              Dim cellImage As Image = DirectCast(Me.Rows(row).Cells(col), DataGridViewProgressCell).GetPaintedCell()
               If Not cellImage Is Nothing Then
                 Try
                   '*** Save image to files folder
@@ -1105,7 +1117,7 @@ Public Class DataGridViewEx
               If Not cellImage Is Nothing Then
                 Try
                   '*** Save image to files folder
-                  Dim imageFilename As String = String.Format("image{0}-{1}.png", row, Me.Columns(col).DisplayIndex)
+                  Dim imageFilename As String = $"image{row}-{Me.Columns(col).DisplayIndex}.png"
                   cellImage.Save(IO.Path.Combine(filesFolder, imageFilename), Imaging.ImageFormat.Png)
                   writer.Write("<img src=""" & IO.Path.Combine(filesFolderName, imageFilename) & """/>")
                 Catch ex As Exception
@@ -1519,3 +1531,4 @@ End Class
 'End Class
 
 '#End Region
+
