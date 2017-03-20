@@ -62,6 +62,12 @@
       .PrintDate = True
       .PrintTitle = "Liste d'exemple"
       '.Columns(0).Visible = False
+
+      Dim cellDate As DataGridViewEx.DataGridViewCalendarCell = CType(.Item(4, 0), DataGridViewEx.DataGridViewCalendarCell)
+      cellDate.MinDate = New Date(2015, 1, 1)
+      cellDate.MaxDate = New Date(2016, 12, 31)
+
+      .ExportSettings.ProgressBarValue = False
     End With
 
     If IO.File.Exists("config.xml") Then
