@@ -26,6 +26,7 @@ Partial Class Form1
     Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
     Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
     Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+    Dim ExportSettings1 As DataGridViewEx.ExportSettings = New DataGridViewEx.ExportSettings()
     Me.btnExportCSV = New System.Windows.Forms.Button()
     Me.btnExportXLSX = New System.Windows.Forms.Button()
     Me.btnPrint = New System.Windows.Forms.Button()
@@ -170,6 +171,8 @@ Partial Class Form1
     DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
     DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
     Me.DataGridViewEx1.DefaultCellStyle = DataGridViewCellStyle2
+    ExportSettings1.ProgressBarValue = True
+    Me.DataGridViewEx1.ExportSettings = ExportSettings1
     Me.DataGridViewEx1.HTMLFilename = "export.html"
     Me.DataGridViewEx1.Location = New System.Drawing.Point(9, 10)
     Me.DataGridViewEx1.Margin = New System.Windows.Forms.Padding(2)

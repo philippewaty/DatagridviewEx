@@ -2,6 +2,26 @@
 
   Inherits DataGridViewTextBoxCell
 
+  Private _MinDate As DateTime
+  Public Property MinDate() As DateTime
+    Get
+      Return _MinDate
+    End Get
+    Set(ByVal value As DateTime)
+      _MinDate = value
+    End Set
+  End Property
+
+  Private _MaxDate As DateTime
+  Public Property MaxDate() As DateTime
+    Get
+      Return _MaxDate
+    End Get
+    Set(ByVal value As DateTime)
+      _MaxDate = value
+    End Set
+  End Property
+
   Public Sub New()
   End Sub
 
@@ -16,6 +36,12 @@
     Dim ctl As CalendarEditingControl = _
         CType(DataGridView.EditingControl, CalendarEditingControl)
     ctl.Value = CType(Me.Value, DateTime)
+    If (MinDate > ctl.MaxDate) Then ctl.MaxDate = DateTimePicker.MaximumDateTime
+    If (MinDate < DateTimePicker.MinimumDateTime) Then MinDate = DateTimePicker.MinimumDateTime
+    If (MaxDate > DateTimePicker.MaximumDateTime) Then MaxDate = DateTimePicker.MaximumDateTime
+    If (MaxDate < ctl.MinDate) Then MaxDate = DateTimePicker.MaximumDateTime
+    ctl.MinDate = MinDate
+    ctl.MaxDate = MaxDate
 
     Dim MyOwner As DataGridViewCalendarColumn = CType(OwningColumn, DataGridViewCalendarColumn)
     Me.Style.Format = MyOwner.DateFormat

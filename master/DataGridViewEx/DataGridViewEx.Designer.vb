@@ -20,6 +20,7 @@
     InitializeComponent()
     'DoubleBuffered = True
     Me.GetType.InvokeMember("DoubleBuffered", Reflection.BindingFlags.NonPublic Or Reflection.BindingFlags.Instance Or System.Reflection.BindingFlags.SetProperty, Nothing, Me, New Object() {True})
+    _ExportSettings = New ExportSettings()
   End Sub
 
   'Component overrides dispose to clean up the component list.
