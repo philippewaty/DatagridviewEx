@@ -556,6 +556,9 @@ Public Class DataGridViewEx
           'Draw Columns Contents                
           For Each Cel As DataGridViewCell In GridRow.Cells
             If Columns(Cel.ColumnIndex).Visible Then
+              '*** Draw back color
+              e.Graphics.FillRectangle(New SolidBrush(Cel.InheritedStyle.BackColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight))
+
               If Not (Cel.Value Is Nothing) Then
                 If TypeOf (Cel) Is DataGridViewCalendarCell Then
                   '*** Get the date format from the column
@@ -594,7 +597,6 @@ Public Class DataGridViewEx
                 Else
                   e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
                 End If
-
 
                 'e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
               End If
@@ -1101,16 +1103,16 @@ Public Class DataGridViewEx
             ElseIf TypeOf (Me.Rows(row).Cells(col)) Is DataGridViewProgressCell Then
               writer.Write(Me.Rows(row).Cells(col).Value)
 
-              Dim cellImage As Image = DirectCast(Me.Rows(row).Cells(col), DataGridViewProgressCell).GetPaintedCell()
-              If Not cellImage Is Nothing Then
-                Try
-                  '*** Save image to files folder
-                  Dim imageFilename As String = String.Format("image{0}-{1}.png", row, Me.Columns(col).DisplayIndex)
-                  cellImage.Save(IO.Path.Combine(filesFolder, imageFilename), Imaging.ImageFormat.Png)
-                Catch ex As Exception
+              'Dim cellImage As Image = DirectCast(Me.Rows(row).Cells(col), DataGridViewProgressCell).GetPaintedCell()
+              'If Not cellImage Is Nothing Then
+              '  Try
+              '    '*** Save image to files folder
+              '    Dim imageFilename As String = String.Format("image{0}-{1}.png", row, Me.Columns(col).DisplayIndex)
+              '    cellImage.Save(IO.Path.Combine(filesFolder, imageFilename), Imaging.ImageFormat.Png)
+              '  Catch ex As Exception
 
-                End Try
-              End If
+              '  End Try
+              'End If
             ElseIf TypeOf (Me.Rows(row).Cells(col)) Is DataGridViewImageCell Then
               '*** http://www.codeproject.com/Articles/680421/Create-Read-Edit-Advance-Excel-Report-in
               Dim cellImage As Image = DirectCast(Me.Rows(row).Cells(col).FormattedValue, Image)

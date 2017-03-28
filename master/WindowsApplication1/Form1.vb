@@ -32,6 +32,8 @@
       .ResumeLayout()
       .DataSource = lst
 
+      .Item(1, 1).Style.ForeColor = Color.Red
+
       Dim progress As DataGridViewEx.DataGridViewProgressColumn = DirectCast(.Columns("columnPrg"), DataGridViewEx.DataGridViewProgressColumn)
       'progress.ColorProgress = Color.Red
       progress.DisplayText = True
@@ -42,6 +44,8 @@
       'progress.Value = 870
 
       .Rows(9).DefaultCellStyle.BackColor = Color.SandyBrown
+      .Item(1, 9).Style.BackColor = Color.GreenYellow
+      .Item(1, 9).Style.ForeColor = Color.CornflowerBlue
 
       Dim cboCell As DataGridViewComboBoxCell
       cboCell = CType(.Rows(2).Cells(5), DataGridViewComboBoxCell)
