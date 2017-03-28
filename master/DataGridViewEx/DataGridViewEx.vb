@@ -631,7 +631,11 @@ Public Class DataGridViewEx
     Me.Columns.Item(columnIndex).Visible = Not value
   End Sub
 
-  'Public Function AddComboBoxColumn(ByVal HeaderText As String, ByVal DisplayStyle As DataGridViewComboBoxDisplayStyle, ByVal ValueType As Type, ByVal Items() As Object, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "") As Integer
+  <Obsolete("Use other method with columnName and HeaderText")>
+  Public Function AddComboBoxColumn(ByVal HeaderText As String, ByVal DisplayStyle As DataGridViewComboBoxDisplayStyle, ByVal ValueType As Type, ByVal Items() As Object, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "") As Integer
+    Return AddComboBoxColumn(HeaderText, HeaderText, DisplayStyle, Items, ColumnIndex, DataPropertyName)
+  End Function
+
   Public Function AddComboBoxColumn(ByVal columnName As String, ByVal HeaderText As String, ByVal DisplayStyle As DataGridViewComboBoxDisplayStyle, ByVal Items() As Object, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "", Optional ByVal Width As Integer = -1) As Integer
     'http://fikou-sama.freevar.com/mes-articles.php?ID=1
     'https://msdn.microsoft.com/en-us/library/system.windows.forms.datagridviewcolumn.valuetype%28v=vs.110%29.aspx
@@ -660,7 +664,7 @@ Public Class DataGridViewEx
     Dim index As Integer = ColumnIndex
 
     col.Name = columnName
-    col.HeaderText = "Link me"
+    col.HeaderText = HeaderText
     col.DataPropertyName = DataPropertyName
     If Width <> -1 Then col.Width = Width
     If ColumnIndex <> -1 Then
@@ -669,6 +673,11 @@ Public Class DataGridViewEx
       index = Me.Columns.Add(col)
     End If
     Return index
+  End Function
+
+  <Obsolete("Use other method with columnName and HeaderText")>
+  Public Function AddCheckBoxColumn(ByVal columnName As String, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "", Optional ByVal Width As Integer = -1) As Integer
+    Return AddCheckBoxColumn(columnName, columnName, ColumnIndex, DataPropertyName, Width)
   End Function
 
   Public Function AddCheckBoxColumn(ByVal columnName As String, ByVal HeaderText As String, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "", Optional ByVal Width As Integer = -1) As Integer
@@ -702,6 +711,11 @@ Public Class DataGridViewEx
       index = Me.Columns.Add(col)
     End If
     Return index
+  End Function
+
+  <Obsolete("Use other method with columnName and HeaderText")>
+  Public Function AddCalendarColumn(ByVal columnName As String, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "", Optional ByVal Width As Integer = -1) As Integer
+    Return AddCalendarColumn(columnName, columnName, ColumnIndex, DataPropertyName, Width)
   End Function
 
   Public Function AddCalendarColumn(ByVal columnName As String, ByVal HeaderText As String, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "", Optional ByVal Width As Integer = -1) As Integer
@@ -768,6 +782,11 @@ Public Class DataGridViewEx
       index = Me.Columns.Add(col)
     End If
     Return index
+  End Function
+
+  <Obsolete("Use other method with columnName and HeaderText")>
+  Public Function AddTextBoxColumn(ByVal columnName As String, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "", Optional ByVal Width As Integer = -1) As Integer
+    Return AddTextBoxColumn(columnName, columnName, ColumnIndex, DataPropertyName, Width)
   End Function
 
   Public Function AddTextBoxColumn(ByVal columnName As String, ByVal HeaderText As String, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "", Optional ByVal Width As Integer = -1) As Integer
