@@ -955,6 +955,7 @@ Public Class DataGridViewEx
             '*** Add column text
             ws.Cells(1, col + 1).Value = Me.Columns(columnsList(col)).HeaderText
           Next col
+          ws.Cells(1, 1, 1, columnsList.Count).AutoFilter = True
         End If
 
         '*** Export data
