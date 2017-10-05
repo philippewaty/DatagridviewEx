@@ -603,6 +603,7 @@ Public Class DataGridViewEx
                   e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
                 End If
 
+
                 'e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
               End If
               'Drawing Cells Borders 
@@ -636,11 +637,7 @@ Public Class DataGridViewEx
     Me.Columns.Item(columnIndex).Visible = Not value
   End Sub
 
-  <Obsolete("Use other method with columnName and HeaderText")>
-  Public Function AddComboBoxColumn(ByVal HeaderText As String, ByVal DisplayStyle As DataGridViewComboBoxDisplayStyle, ByVal ValueType As Type, ByVal Items() As Object, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "") As Integer
-    Return AddComboBoxColumn(HeaderText, HeaderText, DisplayStyle, Items, ColumnIndex, DataPropertyName)
-  End Function
-
+  'Public Function AddComboBoxColumn(ByVal HeaderText As String, ByVal DisplayStyle As DataGridViewComboBoxDisplayStyle, ByVal ValueType As Type, ByVal Items() As Object, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "") As Integer
   Public Function AddComboBoxColumn(ByVal columnName As String, ByVal HeaderText As String, ByVal DisplayStyle As DataGridViewComboBoxDisplayStyle, ByVal Items() As Object, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "", Optional ByVal Width As Integer = -1) As Integer
     'http://fikou-sama.freevar.com/mes-articles.php?ID=1
     'https://msdn.microsoft.com/en-us/library/system.windows.forms.datagridviewcolumn.valuetype%28v=vs.110%29.aspx
@@ -680,11 +677,6 @@ Public Class DataGridViewEx
     Return index
   End Function
 
-  <Obsolete("Use other method with columnName and HeaderText")>
-  Public Function AddCheckBoxColumn(ByVal columnName As String, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "", Optional ByVal Width As Integer = -1) As Integer
-    Return AddCheckBoxColumn(columnName, columnName, ColumnIndex, DataPropertyName, Width)
-  End Function
-
   Public Function AddCheckBoxColumn(ByVal columnName As String, ByVal HeaderText As String, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "", Optional ByVal Width As Integer = -1) As Integer
     Dim col As New DataGridViewCheckBoxColumn
     Dim index As Integer = ColumnIndex
@@ -716,11 +708,6 @@ Public Class DataGridViewEx
       index = Me.Columns.Add(col)
     End If
     Return index
-  End Function
-
-  <Obsolete("Use other method with columnName and HeaderText")>
-  Public Function AddCalendarColumn(ByVal columnName As String, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "", Optional ByVal Width As Integer = -1) As Integer
-    Return AddCalendarColumn(columnName, columnName, ColumnIndex, DataPropertyName, Width)
   End Function
 
   Public Function AddCalendarColumn(ByVal columnName As String, ByVal HeaderText As String, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "", Optional ByVal Width As Integer = -1) As Integer
@@ -787,11 +774,6 @@ Public Class DataGridViewEx
       index = Me.Columns.Add(col)
     End If
     Return index
-  End Function
-
-  <Obsolete("Use other method with columnName and HeaderText")>
-  Public Function AddTextBoxColumn(ByVal columnName As String, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "", Optional ByVal Width As Integer = -1) As Integer
-    Return AddTextBoxColumn(columnName, columnName, ColumnIndex, DataPropertyName, Width)
   End Function
 
   Public Function AddTextBoxColumn(ByVal columnName As String, ByVal HeaderText As String, Optional ByVal ColumnIndex As Integer = -1, Optional ByVal DataPropertyName As String = "", Optional ByVal Width As Integer = -1) As Integer
@@ -1150,16 +1132,16 @@ Public Class DataGridViewEx
             ElseIf TypeOf (Me.Rows(row).Cells(col)) Is DataGridViewProgressCell Then
               writer.Write(Me.Rows(row).Cells(col).Value)
 
-              'Dim cellImage As Image = DirectCast(Me.Rows(row).Cells(col), DataGridViewProgressCell).GetPaintedCell()
-              'If Not cellImage Is Nothing Then
-              '  Try
-              '    '*** Save image to files folder
-              '    Dim imageFilename As String = String.Format("image{0}-{1}.png", row, Me.Columns(col).DisplayIndex)
-              '    cellImage.Save(IO.Path.Combine(filesFolder, imageFilename), Imaging.ImageFormat.Png)
-              '  Catch ex As Exception
+              Dim cellImage As Image = DirectCast(Me.Rows(row).Cells(col), DataGridViewProgressCell).GetPaintedCell()
+              If Not cellImage Is Nothing Then
+                Try
+                  '*** Save image to files folder
+                  Dim imageFilename As String = String.Format("image{0}-{1}.png", row, Me.Columns(col).DisplayIndex)
+                  cellImage.Save(IO.Path.Combine(filesFolder, imageFilename), Imaging.ImageFormat.Png)
+                Catch ex As Exception
 
-              '  End Try
-              'End If
+                End Try
+              End If
             ElseIf TypeOf (Me.Rows(row).Cells(col)) Is DataGridViewImageCell Then
               '*** http://www.codeproject.com/Articles/680421/Create-Read-Edit-Advance-Excel-Report-in
               Dim cellImage As Image = DirectCast(Me.Rows(row).Cells(col).FormattedValue, Image)
