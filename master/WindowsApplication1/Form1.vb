@@ -9,11 +9,13 @@
     For i As Integer = 1 To 10
       lst.Add(New Users(i * 2, "Nom" & i, "login" & i, "password" & i, New Date(1989 + i, i, i), i * 10))
     Next
+    lst.Add(New Users(22, "Nom11", "login11", "password11", Nothing, 110))
 
     With DataGridViewEx1
       .AutoGenerateColumns = False
       .SuspendLayout()
       .Columns.Clear()
+
       .AddTextBoxColumn("columnId", "Id", , "Id")
       .AddTextBoxColumn("columnLogin", "Login", , "Login")
       .AddPasswordColumn("columnPassword", "Mot de passe", , "Password")
@@ -21,7 +23,7 @@
       '.Columns(index).AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
       .AddCalendarColumn("columnDate", "Date création", , "DNais")
       Dim cal As DataGridViewEx.DataGridViewCalendarColumn = DirectCast(.Columns(.ColumnCount - 1), DataGridViewEx.DataGridViewCalendarColumn)
-      cal.DateFormat = "dd MMMM yyyy"
+      cal.DateFormat = "dd/MM/yyyy"
       '.Columns("columnDate").DefaultCellStyle.Format = "dd MMMM yyyy"
 
       '.AddComboBoxColumn("Liste", DataGridViewComboBoxDisplayStyle.DropDownButton, GetType(String), New String() {"test1", "test2"})

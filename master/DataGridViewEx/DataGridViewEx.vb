@@ -562,7 +562,12 @@ Public Class DataGridViewEx
                   If String.IsNullOrEmpty(Cel.OwningColumn.DefaultCellStyle.Format) Then
                     e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
                   Else
-                    e.Graphics.DrawString(DirectCast(Cel.Value, Date).ToString(Cel.OwningColumn.DefaultCellStyle.Format), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
+                    Dim dateResult As DateTime
+                    If DateTime.TryParse(Cel.Value, dateResult) Then
+                      e.Graphics.DrawString(dateResult.ToString(Cel.OwningColumn.DefaultCellStyle.Format), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
+                    Else
+                      e.Graphics.DrawString(String.Empty, Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
+                    End If
                   End If
                 ElseIf TypeOf (Cel) Is DataGridViewPasswordTextBoxCell Then
                   e.Graphics.DrawString(Cel.FormattedValue.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
@@ -850,24 +855,36 @@ Public Class DataGridViewEx
       For row As Integer = 0 To rowsCount
         rowData = ""
         For col As Integer = 0 To columnsList.Count - 1
-          If Not TypeOf (Me.Columns(columnsList(col))) Is DataGridViewImageColumn Or TypeOf (Me.Columns(columnsList(col))) Is DataGridViewProgressColumn Then
-            '*** Add data
-            If Me.Rows(row).Cells(columnsList(col)).Value Is Nothing Then
-              rowData += ""
+          If TypeOf (Me.Rows(row).Cells(col)) Is DataGridViewCalendarCell Then
+            '*** Get the date format from the column
+            If String.IsNullOrEmpty(Me.Columns(col).DefaultCellStyle.Format) Then
+              rowData += Me.Rows(row).Cells(col).Value.ToString()
             Else
-              If TypeOf (Me.Rows(row).Cells(columnsList(col))) Is DataGridViewPasswordTextBoxCell Then
-                rowData += Me.Rows(row).Cells(columnsList(col)).FormattedValue.ToString
+              Dim dateResult As DateTime
+              If DateTime.TryParse(Me.Rows(row).Cells(col).Value, dateResult) Then
+                rowData += dateResult.ToString(Me.Columns(col).DefaultCellStyle.Format)
               Else
-                If Me.Rows(row).Cells(columnsList(col)).Value.ToString.Contains(delimiter) Then
-                  rowData += """" & Me.Rows(row).Cells(columnsList(col)).Value.ToString & """"
-                Else
-                  rowData += Me.Rows(row).Cells(columnsList(col)).Value.ToString
-                End If
+                rowData += String.Empty
               End If
             End If
-            '*** Test adding field separator
-            rowData += IIf(col < columnCount, delimiter, "").ToString
-          End If
+          ElseIf Not TypeOf (Me.Columns(columnsList(col))) Is DataGridViewImageColumn Or TypeOf (Me.Columns(columnsList(col))) Is DataGridViewProgressColumn Then
+            '*** Add data
+            If Me.Rows(row).Cells(columnsList(col)).Value Is Nothing Then
+                rowData += ""
+              Else
+                If TypeOf (Me.Rows(row).Cells(columnsList(col))) Is DataGridViewPasswordTextBoxCell Then
+                  rowData += Me.Rows(row).Cells(columnsList(col)).FormattedValue.ToString
+                Else
+                  If Me.Rows(row).Cells(columnsList(col)).Value.ToString.Contains(delimiter) Then
+                    rowData += """" & Me.Rows(row).Cells(columnsList(col)).Value.ToString & """"
+                  Else
+                    rowData += Me.Rows(row).Cells(columnsList(col)).Value.ToString
+                  End If
+                End If
+              End If
+              '*** Test adding field separator
+              rowData += IIf(col < columnCount, delimiter, "").ToString
+            End If
         Next col
         If Not String.IsNullOrEmpty(rowData) Then sr.WriteLine(rowData)
       Next row
@@ -967,7 +984,12 @@ Public Class DataGridViewEx
                 If String.IsNullOrEmpty(Me.Columns(columnsList(col)).DefaultCellStyle.Format) Then
                   ws.Cells(row + 2, col + 1).Value = Me.Rows(row).Cells(columnsList(col)).Value.ToString()
                 Else
-                  ws.Cells(row + 2, col + 1).Value = DirectCast(Me.Rows(row).Cells(columnsList(col)).Value, Date).ToString(Me.Columns(col).DefaultCellStyle.Format)
+                  Dim dateResult As DateTime
+                  If DateTime.TryParse(Me.Rows(row).Cells(col).Value, dateResult) Then
+                    ws.Cells(row + 2, col + 1).Value = dateResult.ToString(Me.Columns(col).DefaultCellStyle.Format)
+                  Else
+                    ws.Cells(row + 2, col + 1).Value = String.Empty
+                  End If
                 End If
               ElseIf TypeOf (Me.Rows(row).Cells(columnsList(col))) Is DataGridViewPasswordTextBoxCell Then
                 ws.Cells(row + 2, col + 1).Value = Me.Rows(row).Cells(columnsList(col)).FormattedValue.ToString
@@ -1094,7 +1116,12 @@ Public Class DataGridViewEx
               If String.IsNullOrEmpty(Me.Columns(col).DefaultCellStyle.Format) Then
                 writer.Write(Me.Rows(row).Cells(col).Value.ToString())
               Else
-                writer.Write(DirectCast(Me.Rows(row).Cells(col).Value, Date).ToString(Me.Columns(col).DefaultCellStyle.Format))
+                Dim dateResult As DateTime
+                If DateTime.TryParse(Me.Rows(row).Cells(col).Value, dateResult) Then
+                  writer.Write(dateResult.ToString(Me.Columns(col).DefaultCellStyle.Format))
+                Else
+                  writer.Write(String.Empty)
+                End If
               End If
             ElseIf TypeOf (Me.Rows(row).Cells(col)) Is DataGridViewPasswordTextBoxCell Then
               writer.Write(Me.Rows(row).Cells(col).FormattedValue.ToString)

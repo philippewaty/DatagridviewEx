@@ -90,4 +90,52 @@ Public Class DataGridViewProgressCell
 
   End Sub
 
+  Protected Friend Function GetPaintedCell() As Bitmap
+    Dim g As System.Drawing.Graphics
+    Dim cellBounds As System.Drawing.Rectangle = Me.ContentBounds
+    Try
+      Dim clipBounds As System.Drawing.Rectangle = Me.ContentBounds
+      Dim cellStyle As DataGridViewCellStyle = Me.Style
+      Dim MyOwner As DataGridViewProgressColumn = CType(OwningColumn, DataGridViewProgressColumn)
+
+      If cellStyle.Font Is Nothing Then
+        cellStyle.Font = MyOwner.InheritedStyle.Font
+      End If
+
+      g = Graphics.FromImage(New Bitmap(OwningColumn.Width, OwningRow.Height))
+
+      Dim progressVal As Integer = DirectCast(Value, Integer)
+      Dim percentage As Single = (progressVal / 100.0F)
+      ' Need to convert to float before division; otherwise C# returns int which is 0 for anything but 100%.
+      Dim backColorBrush As Brush = New SolidBrush(cellStyle.BackColor)
+      Dim foreColorBrush As Brush = New SolidBrush(cellStyle.ForeColor)
+      ' Draws the cell grid
+
+      If percentage > 0.0 Then
+        ' Draw the progress bar and the text
+        Dim width As Single = Convert.ToInt32((percentage * cellBounds.Width - 4))
+        ' Check if value exceed the column width
+        If width > cellBounds.Width - 4 Then width = cellBounds.Width - 4
+
+        g.FillRectangle(New SolidBrush(MyOwner.ColorProgress), cellBounds.X + 2, cellBounds.Y + 2, width, cellBounds.Height - 4)
+        If MyOwner.DisplayText Then
+          ' draw the text
+          g.DrawString(String.Format("{0} %", progressVal.ToString()), cellStyle.Font, foreColorBrush, Convert.ToSingle(cellBounds.X + (cellBounds.Width / 2) - 5), Convert.ToSingle(cellBounds.Y + 2))
+        End If
+      Else
+        If MyOwner.DisplayText Then
+          ' draw the text
+          If Me.DataGridView.CurrentRow.Index = RowIndex Then
+            g.DrawString(String.Format("{0} %", progressVal.ToString()), cellStyle.Font, New SolidBrush(cellStyle.SelectionForeColor), cellBounds.X + 6, cellBounds.Y + 2)
+          Else
+            g.DrawString(String.Format("{0} %", progressVal.ToString()), cellStyle.Font, foreColorBrush, cellBounds.X + 6, cellBounds.Y + 2)
+          End If
+        End If
+      End If
+    Catch e As Exception
+    End Try
+
+    Return New Bitmap(OwningColumn.Width, OwningRow.Height, g)
+  End Function
+
 End Class
