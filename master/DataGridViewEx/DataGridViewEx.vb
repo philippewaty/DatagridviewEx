@@ -563,10 +563,10 @@ Public Class DataGridViewEx
                 If TypeOf (Cel) Is DataGridViewCalendarCell Then
                   '*** Get the date format from the column
                   If String.IsNullOrEmpty(Cel.OwningColumn.DefaultCellStyle.Format) Then
-                    e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
+                    e.Graphics.DrawString(Cel.Value?.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
                   Else
                     Dim dateResult As DateTime
-                    If DateTime.TryParse(Cel.Value, dateResult) Then
+                    If Not IsDBNull(Cel.Value) AndAlso DateTime.TryParse(Cel.Value, dateResult) Then
                       e.Graphics.DrawString(dateResult.ToString(Cel.OwningColumn.DefaultCellStyle.Format), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
                     Else
                       e.Graphics.DrawString(String.Empty, Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
@@ -600,7 +600,7 @@ Public Class DataGridViewEx
                               printImageWidth,
                               printImageHeigth))
                 Else
-                  e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
+                  e.Graphics.DrawString(Cel.Value?.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
                 End If
 
 
@@ -866,10 +866,10 @@ Public Class DataGridViewEx
               If TypeOf (Me.Rows(row).Cells(col)) Is DataGridViewCalendarCell Then
                 '*** Get the date format from the column
                 If String.IsNullOrEmpty(Me.Columns(col).DefaultCellStyle.Format) Then
-                  rowData += Me.Rows(row).Cells(col).Value.ToString()
+                  rowData += Me.Rows(row).Cells(col).Value?.ToString()
                 Else
                   Dim dateResult As DateTime
-                  If DateTime.TryParse(Me.Rows(row).Cells(col).Value, dateResult) Then
+                  If Not IsDBNull(Me.Rows(row).Cells(col).Value) AndAlso DateTime.TryParse(Me.Rows(row).Cells(col).Value, dateResult) Then
                     rowData += dateResult.ToString(Me.Columns(col).DefaultCellStyle.Format)
                   Else
                     rowData += String.Empty
@@ -877,11 +877,11 @@ Public Class DataGridViewEx
                 End If
               ElseIf TypeOf (Me.Rows(row).Cells(columnsList(col))) Is DataGridViewPasswordTextBoxCell Then
                 rowData += Me.Rows(row).Cells(columnsList(col)).FormattedValue.ToString
+              Else
+                If Me.Rows(row).Cells(columnsList(col)).Value?.ToString.Contains(delimiter) Then
+                  rowData += """" & Me.Rows(row).Cells(columnsList(col)).Value?.ToString & """"
                 Else
-                  If Me.Rows(row).Cells(columnsList(col)).Value.ToString.Contains(delimiter) Then
-                  rowData += """" & Me.Rows(row).Cells(columnsList(col)).Value.ToString & """"
-                Else
-                  rowData += Me.Rows(row).Cells(columnsList(col)).Value.ToString
+                  rowData += Me.Rows(row).Cells(columnsList(col)).Value?.ToString
                 End If
               End If
             End If
@@ -986,10 +986,10 @@ Public Class DataGridViewEx
               If TypeOf (Me.Rows(row).Cells(columnsList(col))) Is DataGridViewCalendarCell Then
                 '*** Get the date format from the columnsList(col)
                 If String.IsNullOrEmpty(Me.Columns(columnsList(col)).DefaultCellStyle.Format) Then
-                  ws.Cells(row + 2, col + 1).Value = Me.Rows(row).Cells(columnsList(col)).Value.ToString()
+                  ws.Cells(row + 2, col + 1).Value = Me.Rows(row).Cells(columnsList(col)).Value?.ToString()
                 Else
                   Dim dateResult As DateTime
-                  If DateTime.TryParse(Me.Rows(row).Cells(col).Value, dateResult) Then
+                  If Not IsDBNull(Me.Rows(row).Cells(col).Value) AndAlso DateTime.TryParse(Me.Rows(row).Cells(col).Value, dateResult) Then
                     ws.Cells(row + 2, col + 1).Value = dateResult.ToString(Me.Columns(col).DefaultCellStyle.Format)
                   Else
                     ws.Cells(row + 2, col + 1).Value = String.Empty
@@ -1118,10 +1118,10 @@ Public Class DataGridViewEx
             If TypeOf (Me.Rows(row).Cells(col)) Is DataGridViewCalendarCell Then
               '*** Get the date format from the column
               If String.IsNullOrEmpty(Me.Columns(col).DefaultCellStyle.Format) Then
-                writer.Write(Me.Rows(row).Cells(col).Value.ToString())
+                writer.Write(Me.Rows(row).Cells(col).Value?.ToString())
               Else
                 Dim dateResult As DateTime
-                If DateTime.TryParse(Me.Rows(row).Cells(col).Value, dateResult) Then
+                If Not IsDBNull(Me.Rows(row).Cells(col).Value) AndAlso DateTime.TryParse(Me.Rows(row).Cells(col).Value, dateResult) Then
                   writer.Write(dateResult.ToString(Me.Columns(col).DefaultCellStyle.Format))
                 Else
                   writer.Write(String.Empty)
