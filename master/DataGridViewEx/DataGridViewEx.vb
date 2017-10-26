@@ -23,6 +23,9 @@ Imports System.Xml.Serialization
 Public Class DataGridViewEx
   Inherits DataGridView
 
+  Private Shared CellCheckBox As CheckBox      ' Holds the Contents of CheckBox Cell
+  Private Shared CellProgress As ProgressBar   ' Holds the Contents of ProgressBar Cell
+
 #Region "Enum"
 
   ''' <summary>
@@ -456,6 +459,9 @@ Public Class DataGridViewEx
   ''' <remarks></remarks>
   Private Sub printDocument1_BeginPrint(sender As Object, e As System.Drawing.Printing.PrintEventArgs) Handles PrintDocument1.BeginPrint
     Try
+      CellCheckBox = New CheckBox
+      CellProgress = New ProgressBar
+
       strFormat = New StringFormat()
       strFormat.Alignment = StringAlignment.Near
       strFormat.LineAlignment = StringAlignment.Center
@@ -559,57 +565,88 @@ Public Class DataGridViewEx
               '*** Draw back color
               e.Graphics.FillRectangle(New SolidBrush(Cel.InheritedStyle.BackColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight))
 
-              If Not (Cel.Value Is Nothing) Then
-                If TypeOf (Cel) Is DataGridViewCalendarCell Then
-                  '*** Get the date format from the column
-                  If String.IsNullOrEmpty(Cel.OwningColumn.DefaultCellStyle.Format) Then
-                    e.Graphics.DrawString(Cel.Value?.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
-                  Else
-                    Dim dateResult As DateTime
-                    If Not IsDBNull(Cel.Value) AndAlso DateTime.TryParse(Cel.Value, dateResult) Then
-                      e.Graphics.DrawString(dateResult.ToString(Cel.OwningColumn.DefaultCellStyle.Format), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
-                    Else
-                      e.Graphics.DrawString(String.Empty, Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
-                    End If
-                  End If
-                ElseIf TypeOf (Cel) Is DataGridViewPasswordTextBoxCell Then
-                  e.Graphics.DrawString(Cel.FormattedValue.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
-                ElseIf TypeOf (Cel) Is DataGridViewProgressCell Then
-                  Dim printImageWidth As Integer = DirectCast(arrColumnWidths(iCount), Integer)
-                  Dim printImageHeigth As Integer = Rows(Cel.RowIndex).Height
-                  Dim ImgSize As Size = DirectCast(Cel.FormattedValue, Image).Size
-
-                  If printImageWidth > ImgSize.Width Then printImageWidth = ImgSize.Width
-                  If printImageHeigth > ImgSize.Height Then printImageHeigth = ImgSize.Height
-                  e.Graphics.DrawImage(DirectCast(Cel.FormattedValue, Image),
-                              New Rectangle(DirectCast(arrColumnLefts(iCount), Integer),
-                              iTopMargin,
-                              printImageWidth,
-                              printImageHeigth))
-                ElseIf TypeOf (Cel) Is DataGridViewImageCell Then
-                  '*** http://www.codeproject.com/Articles/16670/DataGridView-Printing-by-Selecting-Columns-and-Row
-                  Dim printImageWidth As Integer = DirectCast(arrColumnWidths(iCount), Integer)
-                  Dim printImageHeigth As Integer = Rows(Cel.RowIndex).Height
-                  Dim ImgSize As Size = DirectCast(Cel.FormattedValue, Image).Size
-
-                  If printImageWidth > ImgSize.Width Then printImageWidth = ImgSize.Width
-                  If printImageHeigth > ImgSize.Height Then printImageHeigth = ImgSize.Height
-                  e.Graphics.DrawImage(DirectCast(Cel.FormattedValue, Image),
-                              New Rectangle(DirectCast(arrColumnLefts(iCount), Integer),
-                              iTopMargin,
-                              printImageWidth,
-                              printImageHeigth))
-                Else
+              'If Not (Cel.Value Is Nothing) Then
+              If TypeOf (Cel) Is DataGridViewCalendarCell Then
+                '*** Get the date format from the column
+                If String.IsNullOrEmpty(Cel.OwningColumn.DefaultCellStyle.Format) Then
                   e.Graphics.DrawString(Cel.Value?.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
+                Else
+                  Dim dateResult As DateTime
+                  If Not IsDBNull(Cel.Value) AndAlso DateTime.TryParse(Cel.Value, dateResult) Then
+                    e.Graphics.DrawString(dateResult.ToString(Cel.OwningColumn.DefaultCellStyle.Format), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
+                  Else
+                    e.Graphics.DrawString(String.Empty, Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
+                  End If
                 End If
+              ElseIf TypeOf (Cel) Is DataGridViewPasswordTextBoxCell Then
+                e.Graphics.DrawString(Cel.FormattedValue.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
+                'ElseIf TypeOf (Cel) Is DataGridViewProgressCell Then
+                '  Dim printImageWidth As Integer = DirectCast(arrColumnWidths(iCount), Integer)
+                '  Dim printImageHeigth As Integer = Rows(Cel.RowIndex).Height
+                '  Dim ImgSize As Size = DirectCast(Cel.FormattedValue, Image).Size
 
+                '  If printImageWidth > ImgSize.Width Then printImageWidth = ImgSize.Width
+                '  If printImageHeigth > ImgSize.Height Then printImageHeigth = ImgSize.Height
+                '  e.Graphics.DrawImage(DirectCast(Cel.FormattedValue, Image),
+                '              New Rectangle(DirectCast(arrColumnLefts(iCount), Integer),
+                '              iTopMargin,
+                '              printImageWidth,
+                '              printImageHeigth))
+              ElseIf TypeOf (Cel) Is DataGridViewCheckBoxCell Then
+                CellCheckBox.Size = New Size(14, 14)
+                CellCheckBox.Checked = CType(Cel.Value, Boolean)
+                Dim bmp As New Bitmap(arrColumnWidths(iCount), iCellHeight)
+                Dim tmpGraphics As Graphics = Graphics.FromImage(bmp)
+                tmpGraphics.FillRectangle(Brushes.White, New Rectangle(0, 0,
+                        bmp.Width, bmp.Height))
+                bmp.Save("D:\sources\.NET\DataGridViewEx\other\PrintDataGridView_src_VB\PrintDataGridView\chk" & Cel.RowIndex & ".bmp", Imaging.ImageFormat.Bmp)
+                CellCheckBox.DrawToBitmap(bmp, New Rectangle(CType((bmp.Width -
+                        CellCheckBox.Width) / 2, Int32), CType((bmp.Height -
+                        CellCheckBox.Height) / 2, Int32), CellCheckBox.Width,
+                        CellCheckBox.Height))
+                e.Graphics.DrawImage(bmp, New Point(arrColumnLefts(iCount), iTopMargin))
 
-                'e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
+              ElseIf TypeOf (Cel) Is DataGridViewProgressCell Then
+                'Dim printImageWidth As Integer = DirectCast(arrColumnWidths(iCount), Integer)
+                'Dim printImageHeigth As Integer = Rows(Cel.RowIndex).Height
+                'CellProgress.Size = New Size(printImageWidth, printImageHeigth)
+
+                'If printImageWidth > printImageWidth Then printImageWidth = printImageWidth
+                'If printImageHeigth > printImageHeigth Then printImageHeigth = printImageHeigth
+
+                'Dim bmp As New Bitmap(arrColumnWidths(iCount), iCellHeight)
+                'Dim tmpGraphics As Graphics = Graphics.FromImage(bmp)
+                'tmpGraphics.FillRectangle(Brushes.White, New Rectangle(0, 0,
+                '        bmp.Width, bmp.Height))
+                'CellProgress.DrawToBitmap(bmp, New Rectangle(CType((printImageWidth -
+                '        CellProgress.Width) / 2, Int32), CType((printImageHeigth -
+                '        CellProgress.Height) / 2, Int32), CellProgress.Width,
+                '        CellProgress.Height))
+                'e.Graphics.DrawImage(bmp, New Point(arrColumnLefts(iCount), iTopMargin))
+
+              ElseIf TypeOf (Cel) Is DataGridViewImageCell Then
+                '*** http://www.codeproject.com/Articles/16670/DataGridView-Printing-by-Selecting-Columns-and-Row
+                Dim printImageWidth As Integer = DirectCast(arrColumnWidths(iCount), Integer)
+                Dim printImageHeigth As Integer = Rows(Cel.RowIndex).Height
+                Dim ImgSize As Size = DirectCast(Cel.FormattedValue, Image).Size
+
+                If printImageWidth > ImgSize.Width Then printImageWidth = ImgSize.Width
+                If printImageHeigth > ImgSize.Height Then printImageHeigth = ImgSize.Height
+                e.Graphics.DrawImage(DirectCast(Cel.FormattedValue, Image),
+                            New Rectangle(DirectCast(arrColumnLefts(iCount), Integer),
+                            iTopMargin,
+                            printImageWidth,
+                            printImageHeigth))
+              Else
+                e.Graphics.DrawString(Cel.Value?.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
               End If
+
+              'e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font, New SolidBrush(Cel.InheritedStyle.ForeColor), New RectangleF(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight), strFormat)
+            End If
               'Drawing Cells Borders 
               e.Graphics.DrawRectangle(Pens.Black, New Rectangle(DirectCast(arrColumnLefts(iCount), Integer), iTopMargin, DirectCast(arrColumnWidths(iCount), Integer), iCellHeight))
               System.Math.Max(System.Threading.Interlocked.Increment(iCount), iCount - 1)
-            End If
+            'End If
           Next
         End If
         System.Math.Max(System.Threading.Interlocked.Increment(iRow), iRow - 1)
