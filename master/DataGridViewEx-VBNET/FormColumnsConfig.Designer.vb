@@ -46,7 +46,7 @@ Partial Class FormColumnsConfig
     'btnUp
     '
     Me.btnUp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.btnUp.Image = Global.DataGridViewEx.My.Resources.Resources.up
+    Me.btnUp.Image = Global.DataGridViewExVBNET.My.Resources.Resources.up
     Me.btnUp.Location = New System.Drawing.Point(243, 12)
     Me.btnUp.Name = "btnUp"
     Me.btnUp.Size = New System.Drawing.Size(27, 27)
@@ -57,7 +57,7 @@ Partial Class FormColumnsConfig
     'btnDown
     '
     Me.btnDown.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.btnDown.Image = Global.DataGridViewEx.My.Resources.Resources.down
+    Me.btnDown.Image = Global.DataGridViewExVBNET.My.Resources.Resources.down
     Me.btnDown.Location = New System.Drawing.Point(243, 45)
     Me.btnDown.Name = "btnDown"
     Me.btnDown.Size = New System.Drawing.Size(27, 27)
@@ -69,7 +69,7 @@ Partial Class FormColumnsConfig
     '
     Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
-    Me.btnClose.Image = Global.DataGridViewEx.My.Resources.Resources.fileclose
+    Me.btnClose.Image = Global.DataGridViewExVBNET.My.Resources.Resources.fileclose
     Me.btnClose.Location = New System.Drawing.Point(243, 199)
     Me.btnClose.Name = "btnClose"
     Me.btnClose.Size = New System.Drawing.Size(27, 27)
@@ -79,7 +79,7 @@ Partial Class FormColumnsConfig
     'btnRestore
     '
     Me.btnRestore.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.btnRestore.Image = Global.DataGridViewEx.My.Resources.Resources.recur
+    Me.btnRestore.Image = Global.DataGridViewExVBNET.My.Resources.Resources.recur
     Me.btnRestore.Location = New System.Drawing.Point(243, 78)
     Me.btnRestore.Name = "btnRestore"
     Me.btnRestore.Size = New System.Drawing.Size(27, 27)

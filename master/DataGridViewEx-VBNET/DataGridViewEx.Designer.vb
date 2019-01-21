@@ -94,35 +94,35 @@
     '
     'mnuPrint
     '
-    Me.mnuPrint.Image = Global.DataGridViewEx.My.Resources.Resources.fileprint
+    Me.mnuPrint.Image = Global.DataGridViewExVBNET.My.Resources.Resources.fileprint
     Me.mnuPrint.Name = "mnuPrint"
     Me.mnuPrint.Size = New System.Drawing.Size(170, 22)
     Me.mnuPrint.Text = "Print"
     '
     'mnuPrintPreview
     '
-    Me.mnuPrintPreview.Image = Global.DataGridViewEx.My.Resources.Resources.document_preview
+    Me.mnuPrintPreview.Image = Global.DataGridViewExVBNET.My.Resources.Resources.document_preview
     Me.mnuPrintPreview.Name = "mnuPrintPreview"
     Me.mnuPrintPreview.Size = New System.Drawing.Size(170, 22)
     Me.mnuPrintPreview.Text = "Print preview"
     '
     'mnuExportCSV
     '
-    Me.mnuExportCSV.Image = Global.DataGridViewEx.My.Resources.Resources.page_excel
+    Me.mnuExportCSV.Image = Global.DataGridViewExVBNET.My.Resources.Resources.page_excel
     Me.mnuExportCSV.Name = "mnuExportCSV"
     Me.mnuExportCSV.Size = New System.Drawing.Size(116, 22)
     Me.mnuExportCSV.Text = "CSV..."
     '
     'mnuExportExcel
     '
-    Me.mnuExportExcel.Image = Global.DataGridViewEx.My.Resources.Resources.page_excel
+    Me.mnuExportExcel.Image = Global.DataGridViewExVBNET.My.Resources.Resources.page_excel
     Me.mnuExportExcel.Name = "mnuExportExcel"
     Me.mnuExportExcel.Size = New System.Drawing.Size(116, 22)
     Me.mnuExportExcel.Text = "Excel..."
     '
     'mnuColumnSettings
     '
-    Me.mnuColumnSettings.Image = Global.DataGridViewEx.My.Resources.Resources.package_settings
+    Me.mnuColumnSettings.Image = Global.DataGridViewExVBNET.My.Resources.Resources.package_settings
     Me.mnuColumnSettings.Name = "mnuColumnSettings"
     Me.mnuColumnSettings.Size = New System.Drawing.Size(170, 22)
     Me.mnuColumnSettings.Text = "Column settings..."
