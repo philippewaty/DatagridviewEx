@@ -51,6 +51,8 @@
     </Compile>
     <Compile Include="DataGridViewPasswordTextBoxCell.cs" />
     <Compile Include="DataGridViewPasswordTextBoxColumn.cs" />
+    <Compile Include="DataGridViewProgressCell.cs" />
+    <Compile Include="DataGridViewProgressColumn.cs" />
     <Compile Include="ExportSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
