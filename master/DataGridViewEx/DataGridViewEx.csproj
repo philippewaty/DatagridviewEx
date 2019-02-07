@@ -44,6 +44,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColumnInfo.cs" />
+    <Compile Include="CoolPrintPreviewDialog\CoolPrintPreviewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CoolPrintPreviewDialog\CoolPrintPreviewDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CoolPrintPreviewDialog\CoolPrintPreviewDialog.designer.cs">
+      <DependentUpon>CoolPrintPreviewDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CoolPrintPreviewDialog\PageImageList.cs" />
     <Compile Include="DataGridViewCalendarCell.cs" />
     <Compile Include="DataGridViewCalendarColumn.cs" />
     <Compile Include="DataGridViewEx.cs">
@@ -55,6 +65,41 @@
     <Compile Include="DataGridViewProgressColumn.cs" />
     <Compile Include="ExportSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\document_preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\document_print.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fileclose.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fileprint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\html.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\package_settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\page_excel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\recur.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CoolPrintPreviewDialog\CoolPrintPreviewDialog.resx">
+      <DependentUpon>CoolPrintPreviewDialog.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
