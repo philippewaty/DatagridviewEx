@@ -22,7 +22,7 @@
       index = .AddTextBoxColumn("columnName", "Nom", , "Name")
       '.Columns(index).AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
       .AddCalendarColumn("columnDate", "Date création", , "DNais")
-      Dim cal As DataGridViewExVBNET.DataGridViewCalendarColumn = DirectCast(.Columns(.ColumnCount - 1), DataGridViewExVBNET.DataGridViewCalendarColumn)
+      Dim cal As DataGridViewEx.DataGridViewCalendarColumn = DirectCast(.Columns(.ColumnCount - 1), DataGridViewEx.DataGridViewCalendarColumn)
       cal.DateFormat = "dd/MM/yyyy"
       '.Columns("columnDate").DefaultCellStyle.Format = "dd MMMM yyyy"
 
@@ -36,7 +36,7 @@
 
       .Item(1, 1).Style.ForeColor = Color.Red
 
-      Dim progress As DataGridViewExVBNET.DataGridViewProgressColumn = DirectCast(.Columns("columnPrg"), DataGridViewExVBNET.DataGridViewProgressColumn)
+      Dim progress As DataGridViewEx.DataGridViewProgressColumn = DirectCast(.Columns("columnPrg"), DataGridViewEx.DataGridViewProgressColumn)
       'progress.ColorProgress = Color.Red
       progress.DisplayText = True
 
@@ -69,7 +69,7 @@
       .PrintTitle = "Liste d'exemple"
       '.Columns(0).Visible = False
 
-      Dim cellDate As DataGridViewExVBNET.DataGridViewCalendarCell = CType(.Item(4, 0), DataGridViewExVBNET.DataGridViewCalendarCell)
+      Dim cellDate As DataGridViewEx.DataGridViewCalendarCell = CType(.Item(4, 0), DataGridViewEx.DataGridViewCalendarCell)
       cellDate.MinDate = New Date(2015, 1, 1)
       cellDate.MaxDate = New Date(2016, 12, 31)
 

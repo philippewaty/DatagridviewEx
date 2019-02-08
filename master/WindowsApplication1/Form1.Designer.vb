@@ -26,7 +26,7 @@ Partial Class Form1
     Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
     Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
     Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-    Dim ExportSettings1 As DataGridViewExVBNET.ExportSettings = New DataGridViewExVBNET.ExportSettings()
+    Dim ExportSettings1 As DataGridViewEx.ExportSettings = New DataGridViewEx.ExportSettings()
     Me.btnExportCSV = New System.Windows.Forms.Button()
     Me.btnExportXLSX = New System.Windows.Forms.Button()
     Me.btnPrint = New System.Windows.Forms.Button()
@@ -38,7 +38,7 @@ Partial Class Form1
     Me.btnSetConfig = New System.Windows.Forms.Button()
     Me.PictureBox1 = New System.Windows.Forms.PictureBox()
     Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-    Me.DataGridViewEx1 = New DataGridViewExVBNET.DataGridViewEx(Me.components)
+    Me.DataGridViewEx1 = New DataGridViewEx.DataGridViewEx(Me.components)
     Me.ContextMenuStrip1.SuspendLayout()
     CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
     CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -161,7 +161,7 @@ Partial Class Form1
     Me.DataGridViewEx1.Configuration = "<?xml version=""1.0"" encoding=""utf-16""?>" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "<ArrayOfColumnInfo xmlns:xsi=""http://www" &
     ".w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" />" &
     ""
-    Me.DataGridViewEx1.ContextMenuStripMergeMode = DataGridViewExVBNET.DataGridViewEx.ContextMenuStripMergingEnum.InsideMenuOnly
+    Me.DataGridViewEx1.ContextMenuStripMergeMode = DataGridViewEx.DataGridViewEx.ContextMenuStripMergingEnum.InsideMenuOnly
     Me.DataGridViewEx1.CSVFilename = "test.csv"
     DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
     DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
@@ -211,7 +211,7 @@ Partial Class Form1
   End Sub
   Friend WithEvents btnExportCSV As System.Windows.Forms.Button
   Friend WithEvents btnExportXLSX As System.Windows.Forms.Button
-  Friend WithEvents DataGridViewEx1 As DataGridViewExVBNET.DataGridViewEx
+  Friend WithEvents DataGridViewEx1 As DataGridViewEx.DataGridViewEx
   Friend WithEvents btnPrint As System.Windows.Forms.Button
   Friend WithEvents btnGetConfig As Button
   Friend WithEvents ContextMenuStrip1 As ContextMenuStrip

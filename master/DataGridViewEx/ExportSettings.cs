@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace DataGridViewEx
 {
   [TypeConverter(typeof(ExportSettingsConverter))]
-  public class DGVExportSettings
+  public class ExportSettings
   {
 
     /// <summary>

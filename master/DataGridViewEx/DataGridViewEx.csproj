@@ -31,10 +31,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus, Version=4.5.3.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.1\lib\net40\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -78,6 +85,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\document_preview.png" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +119,9 @@
     <EmbeddedResource Include="CoolPrintPreviewDialog\CoolPrintPreviewDialog.resx">
       <DependentUpon>CoolPrintPreviewDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DataGridViewEx.resx">
+      <DependentUpon>DataGridViewEx.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormColumnsConfig.resx">
       <DependentUpon>FormColumnsConfig.cs</DependentUpon>
     </EmbeddedResource>
@@ -118,33 +129,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\document_preview1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\down1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\fileclose1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\fileprint1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\html1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\package_settings1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\page_excel1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\recur1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\up1.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\package_settings.ico" />
