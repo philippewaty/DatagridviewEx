@@ -85,7 +85,8 @@ Public Class DataGridViewProgressCell
           End If
         End If
       End If
-    Catch e As Exception
+    Catch ex As Exception
+      Console.WriteLine(ex.Message)
     End Try
 
   End Sub
@@ -93,6 +94,8 @@ Public Class DataGridViewProgressCell
   Protected Friend Function GetPaintedCell() As Bitmap
     Dim g As System.Drawing.Graphics
     Dim cellBounds As System.Drawing.Rectangle = Me.ContentBounds
+
+    g = Graphics.FromImage(New Bitmap(OwningColumn.Width, OwningRow.Height))
     Try
       Dim clipBounds As System.Drawing.Rectangle = Me.ContentBounds
       Dim cellStyle As DataGridViewCellStyle = Me.Style
@@ -101,8 +104,6 @@ Public Class DataGridViewProgressCell
       If cellStyle.Font Is Nothing Then
         cellStyle.Font = MyOwner.InheritedStyle.Font
       End If
-
-      g = Graphics.FromImage(New Bitmap(OwningColumn.Width, OwningRow.Height))
 
       Dim progressVal As Integer = DirectCast(Value, Integer)
       Dim percentage As Single = (progressVal / 100.0F)
@@ -132,7 +133,8 @@ Public Class DataGridViewProgressCell
           End If
         End If
       End If
-    Catch e As Exception
+    Catch ex As Exception
+      Console.WriteLine(ex.Message)
     End Try
 
     Return New Bitmap(OwningColumn.Width, OwningRow.Height, g)

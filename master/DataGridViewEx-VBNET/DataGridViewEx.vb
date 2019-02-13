@@ -251,7 +251,7 @@ Public Class DataGridViewEx
         End Using
 
       Catch ex As Exception
-        Debug.Print(ex.Message)
+        Console.WriteLine(ex.Message)
       End Try
 
       Return sb.ToString
@@ -275,7 +275,7 @@ Public Class DataGridViewEx
         Next
 
       Catch ex As Exception
-        Debug.Print(ex.Message)
+        Console.WriteLine(ex.Message)
       End Try
     End Set
   End Property
