@@ -180,6 +180,12 @@ namespace DataGridViewEx
             column.Visible = this.Columns[i].Visible;
             columns.Add(column);
           }
+          //*** Serialize list<ColumnInfo>
+          using (TextWriter writer = new StringWriter(sb))
+          {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<ColumnInfo>));
+            xmlSerializer.Serialize(writer, columns);
+          }
         }
         catch (Exception ex)
         {
@@ -1225,6 +1231,7 @@ namespace DataGridViewEx
       // 
       // mnuPrint
       // 
+      this.mnuPrint.Image = global::DataGridViewEx.Properties.Resources.fileprint;
       this.mnuPrint.Name = "mnuPrint";
       this.mnuPrint.Size = new System.Drawing.Size(170, 22);
       this.mnuPrint.Text = "Print";
@@ -1232,6 +1239,7 @@ namespace DataGridViewEx
       // 
       // mnuPrintPreview
       // 
+      this.mnuPrintPreview.Image = global::DataGridViewEx.Properties.Resources.document_preview;
       this.mnuPrintPreview.Name = "mnuPrintPreview";
       this.mnuPrintPreview.Size = new System.Drawing.Size(170, 22);
       this.mnuPrintPreview.Text = "Print preview";
@@ -1254,6 +1262,7 @@ namespace DataGridViewEx
       // 
       // mnuExportCSV
       // 
+      this.mnuExportCSV.Image = global::DataGridViewEx.Properties.Resources.page_excel;
       this.mnuExportCSV.Name = "mnuExportCSV";
       this.mnuExportCSV.Size = new System.Drawing.Size(116, 22);
       this.mnuExportCSV.Text = "CSV...";
@@ -1261,6 +1270,7 @@ namespace DataGridViewEx
       // 
       // mnuExportExcel
       // 
+      this.mnuExportExcel.Image = global::DataGridViewEx.Properties.Resources.page_excel;
       this.mnuExportExcel.Name = "mnuExportExcel";
       this.mnuExportExcel.Size = new System.Drawing.Size(116, 22);
       this.mnuExportExcel.Text = "Excel...";
@@ -1281,6 +1291,7 @@ namespace DataGridViewEx
       // 
       // mnuColumnSettings
       // 
+      this.mnuColumnSettings.Image = global::DataGridViewEx.Properties.Resources.package_settings1;
       this.mnuColumnSettings.Name = "mnuColumnSettings";
       this.mnuColumnSettings.Size = new System.Drawing.Size(170, 22);
       this.mnuColumnSettings.Text = "Column settings...";
