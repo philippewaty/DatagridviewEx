@@ -45,7 +45,7 @@
       this.btnRestore.Location = new System.Drawing.Point(243, 78);
       this.btnRestore.Name = "btnRestore";
       this.btnRestore.Size = new System.Drawing.Size(27, 27);
-      this.btnRestore.TabIndex = 8;
+      this.btnRestore.TabIndex = 3;
       this.ToolTip1.SetToolTip(this.btnRestore, "Restore order and visibility");
       this.btnRestore.UseVisualStyleBackColor = true;
       this.btnRestore.Click += new System.EventHandler(this.btnRestore_Click);
@@ -58,7 +58,7 @@
       this.btnClose.Location = new System.Drawing.Point(243, 199);
       this.btnClose.Name = "btnClose";
       this.btnClose.Size = new System.Drawing.Size(27, 27);
-      this.btnClose.TabIndex = 9;
+      this.btnClose.TabIndex = 4;
       this.btnClose.UseVisualStyleBackColor = true;
       // 
       // btnDown
@@ -68,7 +68,7 @@
       this.btnDown.Location = new System.Drawing.Point(243, 45);
       this.btnDown.Name = "btnDown";
       this.btnDown.Size = new System.Drawing.Size(27, 27);
-      this.btnDown.TabIndex = 7;
+      this.btnDown.TabIndex = 2;
       this.ToolTip1.SetToolTip(this.btnDown, "Move down");
       this.btnDown.UseVisualStyleBackColor = true;
       this.btnDown.Click += new System.EventHandler(this.btnDown_Click);
@@ -80,7 +80,7 @@
       this.btnUp.Location = new System.Drawing.Point(243, 12);
       this.btnUp.Name = "btnUp";
       this.btnUp.Size = new System.Drawing.Size(27, 27);
-      this.btnUp.TabIndex = 6;
+      this.btnUp.TabIndex = 1;
       this.ToolTip1.SetToolTip(this.btnUp, "Move up");
       this.btnUp.UseVisualStyleBackColor = true;
       this.btnUp.Click += new System.EventHandler(this.btnUp_Click);
@@ -90,11 +90,12 @@
       this.lstColumns.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+      this.lstColumns.CheckOnClick = true;
       this.lstColumns.FormattingEnabled = true;
       this.lstColumns.Location = new System.Drawing.Point(12, 12);
       this.lstColumns.Name = "lstColumns";
       this.lstColumns.Size = new System.Drawing.Size(225, 214);
-      this.lstColumns.TabIndex = 5;
+      this.lstColumns.TabIndex = 0;
       this.lstColumns.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.lstColumns_ItemCheck);
       // 
       // FormColumnsConfig

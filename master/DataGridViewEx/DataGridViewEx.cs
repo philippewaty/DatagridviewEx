@@ -41,9 +41,12 @@ namespace DataGridViewEx
       _ExportSettings = new ExportSettings();
     }
 
-    [System.Diagnostics.DebuggerNonUserCode()]
-    public DataGridViewEx(System.ComponentModel.IContainer container): base()
+    //[System.Diagnostics.DebuggerNonUserCode()]
+    public DataGridViewEx(System.ComponentModel.IContainer container) : base()
     {
+      InitializeComponent();
+      this.GetType().InvokeMember("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty, null, this, new object[] { true });
+      _ExportSettings = new ExportSettings();
       //Required for Windows.Forms Class Composition Designer support
       if ((container != null))
       {
@@ -72,24 +75,24 @@ namespace DataGridViewEx
     ///<summary>
     ///Indicates if the user has right clicked and that the menu has been merged or not.
     ///</summary>
-    private bool _ContextMenuMerged;
+    private bool _ContextMenuMerged = false;
 
     [Description("Display lines number"), Category("Design"), DefaultValue(true)]
-    public bool DisplayLinesNumber { get; set; }
+    public bool DisplayLinesNumber { get; set; } = true;
 
     ///<summary>
     ///Key used to start export to CSV
     ///</summary>
     ///<returns></returns>
     [Description("Key used to start export to CSV"), DefaultValue(Keys.F11)]
-    public Keys ExportToCSVKey { get; set; }
+    public Keys ExportToCSVKey { get; set; } = Keys.F11;
 
     ///<summary>
     ///Key used to start export to XLSX
     ///</summary>
     ///<returns></returns>
     [Description("Key used to start export to XLS"), DefaultValue(Keys.F12)]
-    public Keys ExportToXLSXKey { get; set; }
+    public Keys ExportToXLSXKey { get; set; } = Keys.F12;
 
     ///<summary>
     ///Filename for exporting to CSV
@@ -117,21 +120,22 @@ namespace DataGridViewEx
     ///</summary>
     ///<returns></returns>
     [Description("Field separator for CSV"), DefaultValue(";")]
-    public string CSVFieldSeparator { get; set; }
+    public string CSVFieldSeparator { get; set; } = ";";
 
     ///<summary>
     ///Write columns name in CSV/XLSX file
     ///</summary>
     ///<returns></returns>
     [Description("Write columns name in CSV/XLSX file"), DefaultValue(true)]
-    public bool ExportWriteColumnHeader { get; set; }
+    public bool ExportWriteColumnHeader { get; set; } = true;
 
     ///<summary>
-    ///Open CSV or XLSX file after export
+    ///Open CSV, XLSX or HTML file after export
     ///</summary>
     ///<returns></returns>
-    [Description("Open CSV or XLSX file after export"), DefaultValue(true)]
-    public bool ExportOpenFileAfter { get; set; }
+    [Description("Open CSV, XLSX or HTML file after export"), DefaultValue(true)]
+    public bool ExportOpenFileAfter { get; set; } = true;
+    //TODO gérer la propriété ExportOpenFileAfter
 
     ///<summary>
     ///Title for printing
@@ -604,13 +608,13 @@ namespace DataGridViewEx
 
       if (string.IsNullOrEmpty(CSVFileName))
         CSVFileName = System.IO.Path.GetTempFileName().Replace(".tmp", ".csv");//temp file name , not really sure 100% is unique.
-                                                                               //*** Test si adding column is allowed
-                                                                               //*** If yes, there is an empty line that we doesn't export
+      //*** Test si adding column is allowed
+      //*** If yes, there is an empty line that we doesn't export
       if (this.AllowUserToAddRows)
         rowsCount -= 1;
 
-      try
-      {
+      //try
+      //{
         //*** Get the columns list according to the displayIndex and visibility = true
         List<string> columnsList = (from column in this.Columns.Cast<DataGridViewColumn>()
                                     where column.Visible == true
@@ -622,7 +626,7 @@ namespace DataGridViewEx
         if (WriteColumnHeaderNames)
         {
           //*** Export headers
-          for (int col = 0; col <= columnsList.Count - 1; col++)
+          for (int col = 0; col <= columnCount; col++)
           {
             if (!((this.Columns[columnsList[col]]) is DataGridViewImageColumn) | (this.Columns[columnsList[col]]) is DataGridViewProgressColumn)
             {
@@ -645,22 +649,22 @@ namespace DataGridViewEx
         for (int row = 0; row <= rowsCount; row++)
         {
           rowData = "";
-          for (int col = 0; col <= columnsList.Count - 1; col++)
+          for (int col = 0; col <= columnCount; col++)
           {
             if (!((this.Columns[columnsList[col]]) is DataGridViewImageColumn) | (this.Columns[columnsList[col]]) is DataGridViewProgressColumn)
             {
               //*** Add data
               if (this.Rows[row].Cells[columnsList[col]].Value == null)
                 rowData += "";
-              else if ((this.Rows[row].Cells[col]) is DataGridViewCalendarCell)
+              else if ((this.Rows[row].Cells[columnsList[col]]) is DataGridViewCalendarCell)
               {
                 //*** Get the date format from the column
                 if (string.IsNullOrEmpty(this.Columns[col].DefaultCellStyle.Format))
-                  rowData += this.Rows[row].Cells[col].Value?.ToString();
+                  rowData += this.Rows[row].Cells[columnsList[col]].Value?.ToString();
                 else
                 {
                   DateTime dateResult = DateTime.MinValue;
-                  if ((this.Rows[row].Cells[row].Value != null) && DateTime.TryParse(this.Rows[row].Cells[row].Value.ToString(), out dateResult))
+                  if ((this.Rows[row].Cells[columnsList[col]].Value != null) && DateTime.TryParse(this.Rows[row].Cells[columnsList[col]].Value.ToString(), out dateResult))
                     rowData += dateResult.ToString(this.Columns[col].DefaultCellStyle.Format);
                   else
                     rowData += string.Empty;
@@ -693,21 +697,21 @@ namespace DataGridViewEx
         }
 
         return string.Empty;
-      }
-      catch (Exception ex)
-      {
-        if (sr != null)
-          sr.Close();
-        return ex.Message;
-      }
+      //}
+      //catch (Exception ex)
+      //{
+      //  if (sr != null)
+      //    sr.Close();
+      //  return ex.Message;
+      //}
 
-      finally
-      {
+      //finally
+      //{
         //*** Cleaning
         if (sr != null)
           sr.Dispose();
         sr = null;
-      }
+      //}
     }
 
     ///<summary>
@@ -775,7 +779,7 @@ namespace DataGridViewEx
           }
 
           //*** Export data
-          for (int row = 0; row <= rowsCount; row++)
+          for (int row = 0; row <= rowsCount - 1; row++)
           {
             for (int col = 0; col <= columnsList.Count - 1; col++)
             {
@@ -790,7 +794,7 @@ namespace DataGridViewEx
                 else
                 {
                   DateTime dateResult = DateTime.MinValue;
-                  if ((this.Rows[row].Cells[col].Value != null) && DateTime.TryParse(this.Rows[row].Cells[col].Value.ToString(), out dateResult))
+                  if ((this.Rows[row].Cells[columnsList[col]].Value != null) && DateTime.TryParse(this.Rows[row].Cells[columnsList[col]].Value.ToString(), out dateResult))
                     ws.Cells[row + 2, col + 1].Value = dateResult.ToString(this.Columns[col].DefaultCellStyle.Format);
                   else
                     ws.Cells[row + 2, col + 1].Value = string.Empty;
@@ -1079,11 +1083,10 @@ namespace DataGridViewEx
           MessageBox.Show(ret, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
       }
-
     }
 
     //*** http://stackoverflow.com/questions/9581626/show-row-number-in-row-header-of-a-datagridview
-    private  void DataGridViewEx_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+    private void DataGridViewEx_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
     {
       if (!DisplayLinesNumber | !RowHeadersVisible)
         return;
@@ -1118,7 +1121,7 @@ namespace DataGridViewEx
     }
 
     //ERROR: Handles clauses are not supported in C#
-    private  void mnuExportExcel_Click(object sender, EventArgs e)
+    private void mnuExportExcel_Click(object sender, EventArgs e)
     {
       using (SaveFileDialog dlg = new SaveFileDialog())
       {
@@ -1198,18 +1201,18 @@ namespace DataGridViewEx
       this.ContextMenuStrip1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
       this.SuspendLayout();
-      //
-      //PrintDialog1
-      //
+      // 
+      // PrintDialog1
+      // 
       this.PrintDialog1.UseEXDialog = true;
-      //
-      //PrintDocument1
-      //
+      // 
+      // PrintDocument1
+      // 
       this.PrintDocument1.BeginPrint += new System.Drawing.Printing.PrintEventHandler(this.PrintDocument1_BeginPrint);
       this.PrintDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.PrintDocument1_PrintPage);
-      //
-      //ContextMenuStrip1
-      //
+      // 
+      // ContextMenuStrip1
+      // 
       this.ContextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuPrint,
             this.mnuPrintPreview,
@@ -1219,28 +1222,28 @@ namespace DataGridViewEx
             this.mnuColumnSettings});
       this.ContextMenuStrip1.Name = "ContextMenuStrip1";
       this.ContextMenuStrip1.Size = new System.Drawing.Size(171, 104);
-      //
-      //mnuPrint
-      //
+      // 
+      // mnuPrint
+      // 
       this.mnuPrint.Name = "mnuPrint";
       this.mnuPrint.Size = new System.Drawing.Size(170, 22);
       this.mnuPrint.Text = "Print";
       this.mnuPrint.Click += new System.EventHandler(this.mnuPrint_Click);
-      //
-      //mnuPrintPreview
-      //
+      // 
+      // mnuPrintPreview
+      // 
       this.mnuPrintPreview.Name = "mnuPrintPreview";
       this.mnuPrintPreview.Size = new System.Drawing.Size(170, 22);
       this.mnuPrintPreview.Text = "Print preview";
       this.mnuPrintPreview.Click += new System.EventHandler(this.mnuPrintPreview_Click);
-      //
-      //ToolStripSeparator1
-      //
+      // 
+      // ToolStripSeparator1
+      // 
       this.ToolStripSeparator1.Name = "ToolStripSeparator1";
       this.ToolStripSeparator1.Size = new System.Drawing.Size(167, 6);
-      //
-      //mnuExport
-      //
+      // 
+      // mnuExport
+      // 
       this.mnuExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuExportCSV,
             this.mnuExportExcel,
@@ -1248,43 +1251,45 @@ namespace DataGridViewEx
       this.mnuExport.Name = "mnuExport";
       this.mnuExport.Size = new System.Drawing.Size(170, 22);
       this.mnuExport.Text = "Export";
-      //
-      //mnuExportCSV
-      //
+      // 
+      // mnuExportCSV
+      // 
       this.mnuExportCSV.Name = "mnuExportCSV";
       this.mnuExportCSV.Size = new System.Drawing.Size(116, 22);
       this.mnuExportCSV.Text = "CSV...";
       this.mnuExportCSV.Click += new System.EventHandler(this.mnuExportCSV_Click);
-      //
-      //mnuExportExcel
-      //
+      // 
+      // mnuExportExcel
+      // 
       this.mnuExportExcel.Name = "mnuExportExcel";
       this.mnuExportExcel.Size = new System.Drawing.Size(116, 22);
       this.mnuExportExcel.Text = "Excel...";
       this.mnuExportExcel.Click += new System.EventHandler(this.mnuExportExcel_Click);
-      //
-      //mnuExportHTML
-      //
+      // 
+      // mnuExportHTML
+      // 
       this.mnuExportHTML.Image = ((System.Drawing.Image)(resources.GetObject("mnuExportHTML.Image")));
       this.mnuExportHTML.Name = "mnuExportHTML";
       this.mnuExportHTML.Size = new System.Drawing.Size(116, 22);
       this.mnuExportHTML.Text = "HTML...";
       this.mnuExportHTML.Click += new System.EventHandler(this.mnuExportHTML_Click);
-      //
-      //ToolStripSeparator2
-      //
+      // 
+      // ToolStripSeparator2
+      // 
       this.ToolStripSeparator2.Name = "ToolStripSeparator2";
       this.ToolStripSeparator2.Size = new System.Drawing.Size(167, 6);
-      //
-      //mnuColumnSettings
-      //
+      // 
+      // mnuColumnSettings
+      // 
       this.mnuColumnSettings.Name = "mnuColumnSettings";
       this.mnuColumnSettings.Size = new System.Drawing.Size(170, 22);
       this.mnuColumnSettings.Text = "Column settings...";
       this.mnuColumnSettings.Click += new System.EventHandler(this.mnuColumnSettings_Click);
-      //
-      //DataGridViewEx
-      //
+      // 
+      // DataGridViewEx
+      // 
+      this.AllowUserToAddRows = false;
+      this.AllowUserToDeleteRows = false;
       this.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.DataGridViewEx_RowPostPaint);
       this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewEx_KeyUp);
       this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DataGridViewEx_MouseUp);
