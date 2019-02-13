@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace DataGridViewEx
 {
@@ -54,11 +55,14 @@ namespace DataGridViewEx
     {
       base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
 
+      TextBox txtBox = ((TextBox)this.DataGridView.EditingControl);
       //Remember the current password properties of the editing control.
+      this.editingControlPasswordChar = txtBox.PasswordChar;
+      this.editingControlUseSystemPasswordChar = txtBox.UseSystemPasswordChar;
 
       //Set the new password properties of the editing control.
-      // ERROR: Not supported in C#: WithStatement
-
+      txtBox.PasswordChar = this.PasswordChar;
+      txtBox.UseSystemPasswordChar = this.UseSystemPasswordChar;
     }
 
     public override void DetachEditingControl()
@@ -66,8 +70,9 @@ namespace DataGridViewEx
       base.DetachEditingControl();
 
       //Reset the old password properties of the editing control.
-      // ERROR: Not supported in C#: WithStatement
-
+      TextBox txtBox = ((TextBox)this.DataGridView.EditingControl);
+      txtBox.PasswordChar = this.editingControlPasswordChar;
+      txtBox.UseSystemPasswordChar = this.editingControlUseSystemPasswordChar;
     }
 
   }

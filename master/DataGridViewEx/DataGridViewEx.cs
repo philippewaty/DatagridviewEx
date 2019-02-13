@@ -619,8 +619,8 @@ namespace DataGridViewEx
       if (this.AllowUserToAddRows)
         rowsCount -= 1;
 
-      //try
-      //{
+      try
+      {
         //*** Get the columns list according to the displayIndex and visibility = true
         List<string> columnsList = (from column in this.Columns.Cast<DataGridViewColumn>()
                                     where column.Visible == true
@@ -703,21 +703,21 @@ namespace DataGridViewEx
         }
 
         return string.Empty;
-      //}
-      //catch (Exception ex)
-      //{
-      //  if (sr != null)
-      //    sr.Close();
-      //  return ex.Message;
-      //}
+      }
+      catch (Exception ex)
+      {
+        if (sr != null)
+          sr.Close();
+        return ex.Message;
+      }
 
-      //finally
-      //{
+      finally
+      {
         //*** Cleaning
         if (sr != null)
           sr.Dispose();
         sr = null;
-      //}
+      }
     }
 
     ///<summary>

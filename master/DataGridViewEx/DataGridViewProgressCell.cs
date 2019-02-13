@@ -105,8 +105,9 @@ namespace DataGridViewEx
           }
         }
       }
-      catch (Exception e)
+      catch (Exception ex)
       {
+        Console.WriteLine(ex.Message);
       }
 
     }
@@ -166,8 +167,9 @@ namespace DataGridViewEx
           }
         }
       }
-      catch (Exception e)
+      catch (Exception ex)
       {
+        Console.WriteLine(ex.Message);
       }
 
       return new Bitmap(OwningColumn.Width, OwningRow.Height, g);
