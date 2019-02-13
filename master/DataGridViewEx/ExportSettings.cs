@@ -11,6 +11,7 @@ namespace DataGridViewEx
     /// Indicates if the progressbar's value is exported (TRUE) or if it is his picture (FALSE)
     /// </summary>
     /// <returns></returns>
+    [Description("Indicates if the progressbar's value is exported (TRUE) or if it is his picture (FALSE)"), Browsable(true), Category("ExportSettings")]
     public bool ProgressBarValue { get; set; }
   }
 
