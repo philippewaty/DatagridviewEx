@@ -135,8 +135,7 @@ namespace DataGridViewEx.Properties {
         ///&lt;html&gt;
         ///  &lt;head&gt;
         ///  &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;
-        ///  &lt;meta name=&quot;generator&quot; content=&quot;PSPad editor, www.pspad.com&quot;&gt;
-        ///  &lt;style&gt;
+        ///  &lt;style type=&quot;text/css&quot;&gt;
         ///    table, th, td {
         ///      border: 1px solid black;
         ///      border-collapse: collapse;

@@ -145,8 +145,7 @@
 &lt;html&gt;
   &lt;head&gt;
   &lt;meta http-equiv="content-type" content="text/html; charset=utf-8"&gt;
-  &lt;meta name="generator" content="PSPad editor, www.pspad.com"&gt;
-  &lt;style&gt;
+  &lt;style type="text/css"&gt;
     table, th, td {
       border: 1px solid black;
       border-collapse: collapse;

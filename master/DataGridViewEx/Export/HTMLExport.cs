@@ -130,7 +130,7 @@ namespace DataGridViewEx.Export
                     //*** Save image to files folder
                     string imageFilename = $"image{row}-{dgv.Columns[col].DisplayIndex}.png";
                     cellImage.Save(Path.Combine(filesFolder, imageFilename), System.Drawing.Imaging.ImageFormat.Png);
-                    writer.Write("<img src=\"" + Path.Combine(filesFolderName, imageFilename) + "\"/>");
+                    writer.Write("<img src=\"" + Path.Combine(filesFolderName, imageFilename) + "\" alt=\"\">");
                   }
                   catch (Exception ex)
                   {
@@ -145,6 +145,7 @@ namespace DataGridViewEx.Export
           }
           writer.WriteLine("      </tr>");
         }
+        writer.WriteLine("    </table>");
         writer.WriteLine(Properties.Resources.HTMLFooter);
         writer.Flush();
         writer.Close();
