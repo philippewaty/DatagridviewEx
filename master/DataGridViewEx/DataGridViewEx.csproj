@@ -60,15 +60,15 @@
       <DependentUpon>CoolPrintPreviewDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="CoolPrintPreviewDialog\PageImageList.cs" />
-    <Compile Include="DataGridViewCalendarCell.cs" />
-    <Compile Include="DataGridViewCalendarColumn.cs" />
+    <Compile Include="DataGridViewColumns\DataGridViewCalendarCell.cs" />
+    <Compile Include="DataGridViewColumns\DataGridViewCalendarColumn.cs" />
     <Compile Include="DataGridViewEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataGridViewPasswordTextBoxCell.cs" />
-    <Compile Include="DataGridViewPasswordTextBoxColumn.cs" />
-    <Compile Include="DataGridViewProgressCell.cs" />
-    <Compile Include="DataGridViewProgressColumn.cs" />
+    <Compile Include="DataGridViewColumns\DataGridViewPasswordTextBoxCell.cs" />
+    <Compile Include="DataGridViewColumns\DataGridViewPasswordTextBoxColumn.cs" />
+    <Compile Include="DataGridViewColumns\DataGridViewProgressCell.cs" />
+    <Compile Include="DataGridViewColumns\DataGridViewProgressColumn.cs" />
     <Compile Include="ExportSettings.cs" />
     <Compile Include="Export\CSVExport.cs" />
     <Compile Include="Export\HTMLExport.cs" />
