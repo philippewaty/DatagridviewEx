@@ -70,6 +70,9 @@
     <Compile Include="DataGridViewProgressCell.cs" />
     <Compile Include="DataGridViewProgressColumn.cs" />
     <Compile Include="ExportSettings.cs" />
+    <Compile Include="Export\CSVExport.cs" />
+    <Compile Include="Export\HTMLExport.cs" />
+    <Compile Include="Export\XLSExport.cs" />
     <Compile Include="FormColumnsConfig.cs">
       <SubType>Form</SubType>
     </Compile>

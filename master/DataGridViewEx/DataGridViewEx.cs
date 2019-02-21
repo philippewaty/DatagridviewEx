@@ -591,10 +591,10 @@ namespace DataGridViewEx
     ///<remarks></remarks>
     public string ExportToCSV()
     {
-      return ExportToCSV(CSVFilename, ExportWriteColumnHeader, CSVFieldSeparator);
+      return ExportToCSV(CSVFilename, this.ExportWriteColumnHeader, this.CSVFieldSeparator);
     }
 
-    ///<summary>
+    /// <summary>
     /// Export a DataGridView to CSV file
     /// </summary>
     /// <param name="CSVFileName">CSV file</param>
@@ -602,122 +602,10 @@ namespace DataGridViewEx
     /// <param name="DelimiterFormat">Field separator (; or , or ...)</param>
     /// <returns>Empty string if no error otherwise returns error message</returns>
     /// <remarks></remarks>
-    /// http://www.daniweb.com/software-development/vbnet/threads/364492/export-datagridview-as-csv
-    /// http://www.developpez.net/forums/d1036098/dotnet/langages/vb-net/export-datagrid-vers-csv-problemes-headers/
     public string ExportToCSV(string CSVFileName, bool WriteColumnHeaderNames = false, string DelimiterFormat = ";")
     {
-      StreamWriter sr = null;
-      string delimiter = DelimiterFormat;
-      int columnCount = this.Columns.Count - 1;
-      int rowsCount = this.RowCount - 1;
-      string rowData = "";
-
-      if (string.IsNullOrEmpty(CSVFileName))
-        CSVFileName = System.IO.Path.GetTempFileName().Replace(".tmp", ".csv");//temp file name , not really sure 100% is unique.
-      //*** Test si adding column is allowed
-      //*** If yes, there is an empty line that we doesn't export
-      if (this.AllowUserToAddRows)
-        rowsCount -= 1;
-
-      try
-      {
-        //*** Get the columns list according to the displayIndex and visibility = true
-        List<string> columnsList = (from column in this.Columns.Cast<DataGridViewColumn>()
-                                    where column.Visible == true
-                                    orderby column.DisplayIndex
-                                    select column.Name).ToList();
-
-        sr = new StreamWriter(CSVFileName, false, System.Text.Encoding.Default);
-        sr.AutoFlush = true;
-        if (WriteColumnHeaderNames)
-        {
-          //*** Export headers
-          for (int col = 0; col <= columnCount; col++)
-          {
-            if (!((this.Columns[columnsList[col]]) is DataGridViewImageColumn) | (this.Columns[columnsList[col]]) is DataGridViewProgressColumn)
-            {
-              //***Add text in column
-              if (this.Columns[columnsList[col]].HeaderText.Contains(delimiter))
-                rowData += "\"" + this.Columns[columnsList[col]].HeaderText + "\"";
-              else
-                rowData += this.Columns[columnsList[col]].HeaderText;
-              //*** Test adding field separator
-              if (col < ColumnCount)
-                rowData += delimiter;
-              else
-                rowData += "";
-            }
-          }
-          sr.WriteLine(rowData);
-        }
-
-        //*** Export data
-        for (int row = 0; row <= rowsCount; row++)
-        {
-          rowData = "";
-          for (int col = 0; col <= columnCount; col++)
-          {
-            if (!((this.Columns[columnsList[col]]) is DataGridViewImageColumn) | (this.Columns[columnsList[col]]) is DataGridViewProgressColumn)
-            {
-              //*** Add data
-              if (this.Rows[row].Cells[columnsList[col]].Value == null)
-                rowData += "";
-              else if ((this.Rows[row].Cells[columnsList[col]]) is DataGridViewCalendarCell)
-              {
-                //*** Get the date format from the column
-                if (string.IsNullOrEmpty(this.Columns[col].DefaultCellStyle.Format))
-                  rowData += this.Rows[row].Cells[columnsList[col]].Value?.ToString();
-                else
-                {
-                  DateTime dateResult = DateTime.MinValue;
-                  if ((this.Rows[row].Cells[columnsList[col]].Value != null) && DateTime.TryParse(this.Rows[row].Cells[columnsList[col]].Value.ToString(), out dateResult))
-                    rowData += dateResult.ToString(this.Columns[col].DefaultCellStyle.Format);
-                  else
-                    rowData += string.Empty;
-                }
-              }
-              else if ((this.Rows[row].Cells[columnsList[col]]) is DataGridViewPasswordTextBoxCell)
-                rowData += this.Rows[row].Cells[columnsList[col]].FormattedValue.ToString();
-              else if (this.Rows[row].Cells[columnsList[col]].Value != null && this.Rows[row].Cells[columnsList[col]].Value.ToString().Contains(delimiter))
-                rowData += "\"" + this.Rows[row].Cells[columnsList[col]].Value?.ToString() + "\"";
-              else
-                rowData += this.Rows[row].Cells[columnsList[col]].Value?.ToString();
-              //*** Test adding field separator
-              if (col < ColumnCount)
-                rowData += delimiter;
-              else
-                rowData += "";
-            }
-          }
-          if (!string.IsNullOrEmpty(rowData))
-            sr.WriteLine(rowData);
-        }
-        sr.Close();
-
-        if (System.IO.File.Exists(CSVFileName))
-        {
-          Process myProcess = new Process();
-
-          myProcess.StartInfo.FileName = CSVFileName;
-          myProcess.Start();
-        }
-
-        return string.Empty;
-      }
-      catch (Exception ex)
-      {
-        if (sr != null)
-          sr.Close();
-        return ex.Message;
-      }
-
-      finally
-      {
-        //*** Cleaning
-        if (sr != null)
-          sr.Dispose();
-        sr = null;
-      }
+      Export.CSVExport export = new Export.CSVExport();
+      return export.ExportToCSV(this, CSVFilename, WriteColumnHeaderNames, DelimiterFormat);
     }
 
     ///<summary>
@@ -727,140 +615,21 @@ namespace DataGridViewEx
     /// <remarks></remarks>
     public string ExportToXLSX()
     {
-      return ExportToXLSX(XLSXFilename, ExportWriteColumnHeader);
+      Export.XLSExport export = new Export.XLSExport();
+      return export.ExportToXLSX(this, XLSXFilename, ExportWriteColumnHeader);
     }
 
-    ///<summary>
+    /// <summary>
     /// Export a DataGridView to XLSX file
     /// </summary>
     /// <param name="XLSXFileName">XLSX file</param>
     /// <param name="WriteColumnHeaderNames">Write header</param>
     /// <returns>Empty string if no error otherwise returns error message</returns>
     /// <remarks></remarks>
-    /// http://codesr.thewebflash.com/2014/10/export-datagridview-data-to-excel-using_16.html
     public string ExportToXLSX(string XLSXFileName, bool WriteColumnHeaderNames = false)
     {
-      int columnCount = this.Columns.Count - 1;
-      int rowsCount = this.RowCount - 1;
-
-      if (string.IsNullOrEmpty(XLSXFileName))
-        XLSXFileName = System.IO.Path.GetTempFileName().Replace(".tmp", ".xlsx");//temp file name , not really sure 100% is unique.
-
-      //*** Test si adding column is allowed
-      //*** If yes, there is an empty line that we doesn't export
-      if (this.AllowUserToAddRows)
-        rowsCount -= 1;
-
-      try
-      {
-        if (System.IO.File.Exists(XLSXFileName))
-          System.IO.File.Delete(XLSXFileName);
-
-        using (ExcelPackage pck = new ExcelPackage(new FileInfo(XLSXFileName)))
-        {
-          ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Sheet1");
-
-          //If Me.DataSource IsNot Nothing Then
-          //If Me.DataSource.GetType.Namespace = "System.Collections.Generic" Then
-          //ws.Cells("A1").LoadFromCollection(Me.DataSource, WriteColumnHeaderNames)
-          //'ws.Cells("A1").LoadFromDataTable(Me.ConvertToDataTable(Me.DataSource), WriteColumnHeaderNames)
-          //Else
-          //ws.Cells("A1").LoadFromDataTable(CType(Me.DataSource, DataTable), WriteColumnHeaderNames)
-          //End If
-          //Else
-
-          //*** Get the columns list according to the displayIndex and visibility = true
-          List<string> columnsList = (from column in this.Columns.Cast<DataGridViewColumn>()
-                                      where column.Visible == true
-                                      orderby column.DisplayIndex
-                                      select column.Name).ToList();
-
-          if (WriteColumnHeaderNames)
-          {
-            //*** Export headers
-            for (int col = 0; col <= columnsList.Count - 1; col++)
-              //*** Add column text
-              ws.Cells[1, col + 1].Value = this.Columns[columnsList[col]].HeaderText;
-            ws.Cells[1, 1, 1, columnsList.Count].AutoFilter = true;
-          }
-
-          //*** Export data
-          for (int row = 0; row <= rowsCount - 1; row++)
-          {
-            for (int col = 0; col <= columnsList.Count - 1; col++)
-            {
-              //*** Add data
-              if (this.Rows[row].Cells[columnsList[col]].Value == null)
-                ws.Cells[row + 2, col + 1].Value = string.Empty;
-              else if ((this.Rows[row].Cells[columnsList[col]]) is DataGridViewCalendarCell)
-              {
-                //*** Get the date format from the columnsList(col)
-                if (string.IsNullOrEmpty(this.Columns[columnsList[col]].DefaultCellStyle.Format))
-                  ws.Cells[row + 2, col + 1].Value = this.Rows[row].Cells[columnsList[col]].Value?.ToString();
-                else
-                {
-                  DateTime dateResult = DateTime.MinValue;
-                  if ((this.Rows[row].Cells[columnsList[col]].Value != null) && DateTime.TryParse(this.Rows[row].Cells[columnsList[col]].Value.ToString(), out dateResult))
-                    ws.Cells[row + 2, col + 1].Value = dateResult.ToString(this.Columns[col].DefaultCellStyle.Format);
-                  else
-                    ws.Cells[row + 2, col + 1].Value = string.Empty;
-                }
-              }
-              else if ((this.Rows[row].Cells[columnsList[col]]) is DataGridViewPasswordTextBoxCell)
-                ws.Cells[row + 2, col + 1].Value = this.Rows[row].Cells[columnsList[col]].FormattedValue.ToString();
-              else if ((this.Rows[row].Cells[columnsList[col]]) is DataGridViewProgressCell)
-                ws.Cells[row + 2, col + 1].Value = this.Rows[row].Cells[columnsList[col]].Value;
-              else if ((this.Rows[row].Cells[columnsList[col]]) is DataGridViewImageCell)
-              {
-                //*** http://www.codeproject.com/Articles/680421/Create-Read-Edit-Advance-Excel-Report-in
-                Image cellImage = (Image)this.Rows[row].Cells[columnsList[col]].FormattedValue;
-                if (cellImage != null)
-                {
-                  OfficeOpenXml.Drawing.ExcelPicture excelImage;
-                  excelImage = ws.Drawings.AddPicture("imageC" + col + 1 + "R" + row + 2, cellImage);
-                  excelImage.From.Row = row + 1;
-                  excelImage.From.Column = col;
-                  excelImage.SetSize(cellImage.Width, cellImage.Height);
-                  //2x2 px space for better alignment
-                  excelImage.From.ColumnOff = Pixel2MTU(2);
-                  excelImage.From.RowOff = Pixel2MTU(2);
-                }
-              }
-              else
-                ws.Cells[row + 2, col + 1].Value = this.Rows[row].Cells[columnsList[col]].Value;
-            }
-          }
-
-          //End If
-
-          //*** Put color on header
-          using (ExcelRange rng = ws.Cells[1, 1, 1, this.Columns.Count])
-          {
-            rng.Style.Font.Bold = true;
-            rng.Style.Fill.PatternType = ExcelFillStyle.Solid;
-            rng.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(79, 129, 189));
-            rng.Style.Font.Color.SetColor(System.Drawing.Color.White);
-          }
-
-          ws.Cells.AutoFitColumns();
-
-          pck.Save();
-        }
-
-        if (System.IO.File.Exists(XLSXFileName))
-        {
-          Process myProcess = new Process();
-
-          myProcess.StartInfo.FileName = XLSXFileName;
-          myProcess.Start();
-        }
-
-        return string.Empty;
-      }
-      catch (Exception ex)
-      {
-        return ex.Message;
-      }
+      Export.XLSExport export = new Export.XLSExport();
+      return export.ExportToXLSX(this, XLSXFilename, ExportWriteColumnHeader);
     }
 
     ///<summary>
@@ -882,149 +651,8 @@ namespace DataGridViewEx
     ///<remarks></remarks>
     public string ExportToHTML(string HTMLFilename)
     {
-      int columnCount = this.Columns.Count - 1;
-      int rowsCount = this.RowCount - 1;
-      string filesFolder;
-      string filesFolderName;
-
-      //*** Test si adding column is allowed
-      //*** If yes, there is an empty line that we doesn't export
-      if (this.AllowUserToAddRows)
-        rowsCount -= 1;
-
-      filesFolderName = Path.GetFileNameWithoutExtension(HTMLFilename) + "_files";
-      filesFolder = Path.Combine(Path.GetDirectoryName(HTMLFilename), filesFolderName);
-      try
-      {
-        //*** Delete HTML file and image folder
-        if (File.Exists(HTMLFilename))
-        {
-          File.Delete(HTMLFilename);
-        }
-        try
-        {
-          if (Directory.Exists(filesFolder))
-          {
-            Directory.Delete(filesFolder, true);
-          }
-          Directory.CreateDirectory(filesFolder);
-        }
-        catch (Exception ex)
-        {
-          Debug.WriteLine(ex.Message);
-        }
-
-        //*** Get the columns list according to the displayIndex and visibility = true
-        List<string> columnsList = (from column in this.Columns.Cast<DataGridViewColumn>() where column.Visible == true orderby column.DisplayIndex select column.Name).ToList();
-
-        StreamWriter writer = new StreamWriter(HTMLFilename, false, System.Text.Encoding.UTF8);
-
-        writer.WriteLine(Properties.Resources.HTMLHeader);
-        //*** Export headers
-        writer.WriteLine("    <table>");
-        writer.WriteLine("      <thead>");
-        writer.WriteLine("        <tr>");
-        foreach (string col in columnsList)
-        {
-          //*** Add column text
-          writer.WriteLine("          <th>{0}</th>", this.Columns[col].HeaderText);
-        }
-        writer.WriteLine("        </tr>");
-        writer.WriteLine("      </thead>");
-
-        //*** Export data
-        for (int row = 0; row <= rowsCount; row++)
-        {
-          writer.WriteLine("      <tr>");
-          foreach (string col in columnsList)
-          {
-            writer.Write("        <td>");
-            //*** Add data
-            if (this.Rows[row].Cells[col].Value == null)
-            {
-              writer.Write(string.Empty);
-            }
-            else
-            {
-              if ((this.Rows[row].Cells[col]) is DataGridViewCalendarCell)
-              {
-                //*** Get the date format from the column
-                if (string.IsNullOrEmpty(this.Columns[col].DefaultCellStyle.Format))
-                  writer.Write(this.Rows[row].Cells[col].Value?.ToString());
-                else
-                {
-                  DateTime dateResult = DateTime.MinValue;
-                  if ((this.Rows[row].Cells[col].Value != null) && DateTime.TryParse(this.Rows[row].Cells[col].Value.ToString(), out dateResult))
-                    writer.Write(dateResult.ToString(this.Columns[col].DefaultCellStyle.Format));
-                  else
-                    writer.Write(string.Empty);
-                }
-              }
-              else if ((this.Rows[row].Cells[col]) is DataGridViewPasswordTextBoxCell)
-                writer.Write(this.Rows[row].Cells[col].FormattedValue.ToString());
-              else if ((this.Rows[row].Cells[col]) is DataGridViewProgressCell)
-              {
-                writer.Write(this.Rows[row].Cells[col].Value);
-
-                Image cellImage = ((DataGridViewProgressCell)this.Rows[row].Cells[col]).GetPaintedCell();
-                if (cellImage != null)
-                {
-                  try
-                  {
-                    //*** Save image to files folder
-                    string imageFilename = $"image{row}-{this.Columns[col].DisplayIndex}.png";
-                    cellImage.Save(System.IO.Path.Combine(filesFolder, imageFilename), System.Drawing.Imaging.ImageFormat.Png);
-                  }
-                  catch (Exception ex)
-                  {
-                    Debug.Print(ex.Message);
-                  }
-                }
-              }
-              else if ((this.Rows[row].Cells[col]) is DataGridViewImageCell)
-              {
-                //*** http://www.codeproject.com/Articles/680421/Create-Read-Edit-Advance-Excel-Report-in
-                Image cellImage = (Image)this.Rows[row].Cells[col].FormattedValue;
-                if (cellImage != null)
-                {
-                  try
-                  {
-                    //*** Save image to files folder
-                    string imageFilename = $"image{row}-{this.Columns[col].DisplayIndex}.png";
-                    cellImage.Save(Path.Combine(filesFolder, imageFilename), System.Drawing.Imaging.ImageFormat.Png);
-                    writer.Write("<img src=\"" + Path.Combine(filesFolderName, imageFilename) + "\"/>");
-                  }
-                  catch (Exception ex)
-                  {
-                    Debug.Print(ex.Message);
-                  }
-                }
-              }
-              else
-                writer.Write(this.Rows[row].Cells[col].Value);
-              writer.WriteLine("</td>");
-            }
-            writer.WriteLine("      </tr>");
-          }
-
-          writer.WriteLine(Properties.Resources.HTMLFooter);
-          writer.Flush();
-          writer.Close();
-
-          if (System.IO.File.Exists(HTMLFilename))
-          {
-            Process myProcess = new Process();
-
-            myProcess.StartInfo.FileName = HTMLFilename;
-            myProcess.Start();
-          }
-        }
-      }
-      catch (Exception ex)
-      {
-        return ex.Message;
-      }
-      return string.Empty;
+      Export.HTMLExport export = new Export.HTMLExport();
+      return export.ExportToHTML(this, this.HTMLFilename);
     }
 
     ///<summary>
@@ -1083,7 +711,8 @@ namespace DataGridViewEx
 
       if (e.KeyCode == ExportToXLSXKey)
       {
-        ret = this.ExportToXLSX(XLSXFilename, ExportWriteColumnHeader);
+        Export.XLSExport export = new Export.XLSExport();
+        ret = export.ExportToXLSX(this, this.XLSXFilename, this.ExportWriteColumnHeader);
         if (!string.IsNullOrEmpty(ret))
         {
           MessageBox.Show(ret, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1134,7 +763,9 @@ namespace DataGridViewEx
         dlg.Filter = "Excel file (*.xlsx)|*.xlsx";
         if (dlg.ShowDialog() == DialogResult.Cancel)
           return;
-        this.ExportToXLSX(dlg.FileName, true);
+
+        Export.XLSExport export = new Export.XLSExport();
+        export.ExportToXLSX(this, this.XLSXFilename, this.ExportWriteColumnHeader);
       }
     }
 
