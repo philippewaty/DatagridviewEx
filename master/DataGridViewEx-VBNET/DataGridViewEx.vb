@@ -1187,7 +1187,7 @@ Public Class DataGridViewEx
                   '*** Save image to files folder
                   Dim imageFilename As String = $"image{row}-{Me.Columns(col).DisplayIndex}.png"
                   cellImage.Save(IO.Path.Combine(filesFolder, imageFilename), Imaging.ImageFormat.Png)
-                  writer.Write("<img src=""" & IO.Path.Combine(filesFolderName, imageFilename) & """/>")
+                  writer.Write("<img src=""" & IO.Path.Combine(filesFolderName, imageFilename) & """ alt="""">")
                 Catch ex As Exception
 
                 End Try
@@ -1201,7 +1201,7 @@ Public Class DataGridViewEx
         Next col
         writer.WriteLine("      </tr>")
       Next row
-
+      writer.WriteLine("    </table>")
       writer.WriteLine(My.Resources.HTMLFooter)
       writer.Flush()
       writer.Close()
