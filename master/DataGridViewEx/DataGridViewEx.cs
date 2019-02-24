@@ -707,6 +707,7 @@ namespace DataGridViewEx
         {
           MessageBox.Show(ret, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+        return;
       }
 
       if (e.KeyCode == ExportToXLSXKey)
@@ -717,6 +718,13 @@ namespace DataGridViewEx
         {
           MessageBox.Show(ret, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+        return;
+      }
+
+      if (e.KeyCode == Keys.C && e.Control)
+      {
+        DataObject d = this.GetClipboardContent();
+        Clipboard.SetDataObject(d);
       }
     }
 
