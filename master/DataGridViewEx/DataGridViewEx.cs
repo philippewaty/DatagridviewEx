@@ -32,6 +32,7 @@ namespace DataGridViewEx
     internal ToolStripMenuItem mnuExportHTML;
     internal ToolStripSeparator ToolStripSeparator2;
     internal ToolStripMenuItem mnuColumnSettings;
+    Printer printer = new Printer();
 
     [System.Diagnostics.DebuggerNonUserCode()]
     public DataGridViewEx()
@@ -821,9 +822,11 @@ namespace DataGridViewEx
 
     #endregion
 
-    public bool Print(string JobName, string Title, bool displayDate, bool Preview)
+    public void Print(string JobName, string Title, bool displayDate, bool Preview)
     {
-      return false;
+      //TODO gérer Title
+      //TODO gérer displayDate
+      printer.startPrint(this, true, true, false, Preview, JobName);
     }
 
     private void InitializeComponent()
@@ -940,6 +943,7 @@ namespace DataGridViewEx
       // 
       this.AllowUserToAddRows = false;
       this.AllowUserToDeleteRows = false;
+      this.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataGridViewEx_DataError);
       this.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.DataGridViewEx_RowPostPaint);
       this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridViewEx_KeyUp);
       this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DataGridViewEx_MouseUp);
@@ -957,6 +961,11 @@ namespace DataGridViewEx
     private void PrintDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
     {
 
+    }
+
+    private void DataGridViewEx_DataError(object sender, DataGridViewDataErrorEventArgs e)
+    {
+      return;
     }
   }
 }

@@ -123,26 +123,26 @@ namespace CoolPrintPreview
 
         void _btnPrint_Click(object sender, EventArgs e)
         {
-            using (var dlg = new PrintDialog())
-            {
-                // configure dialog
-                dlg.AllowSomePages = true;
-                dlg.AllowSelection = true;
-                dlg.UseEXDialog = true;
-                dlg.Document = Document;
+            //using (var dlg = new PrintDialog())
+            //{
+            //    // configure dialog
+            //    dlg.AllowSomePages = true;
+            //    dlg.AllowSelection = true;
+            //    dlg.UseEXDialog = true;
+            //    dlg.Document = Document;
 
-                // show allowed page range
-                var ps = dlg.PrinterSettings;
-                ps.MinimumPage = ps.FromPage = 1;
-                ps.MaximumPage = ps.ToPage = _preview.PageCount;
+            //    // show allowed page range
+            //    var ps = dlg.PrinterSettings;
+            //    ps.MinimumPage = ps.FromPage = 1;
+            //    ps.MaximumPage = ps.ToPage = _preview.PageCount;
 
-                // show dialog
-                if (dlg.ShowDialog(this) == DialogResult.OK)
-                {
+            //    // show dialog
+            //    if (dlg.ShowDialog(this) == DialogResult.OK)
+            //    {
                     // print selected page range
                     _preview.Print();
-                }
-            }
+            //    }
+            //}
         }
         void _btnPageSetup_Click(object sender, EventArgs e)
         {

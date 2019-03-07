@@ -100,23 +100,27 @@ namespace DataGridViewEx.Export
               }
               else if ((dgv.Rows[row].Cells[col]) is DataGridViewPasswordTextBoxCell)
                 writer.Write(dgv.Rows[row].Cells[col].FormattedValue.ToString());
+              //TODO Générer l'image de la DataGridViewCheckBoxCell
               else if ((dgv.Rows[row].Cells[col]) is DataGridViewProgressCell)
               {
-                writer.Write(dgv.Rows[row].Cells[col].Value);
-
-                Image cellImage = ((DataGridViewProgressCell)dgv.Rows[row].Cells[col]).GetPaintedCell();
+                Image cellImage = (Image)((DataGridViewProgressCell)dgv.Rows[row].Cells[col]).FormattedValue;
                 if (cellImage != null)
                 {
                   try
                   {
                     //*** Save image to files folder
                     string imageFilename = $"image{row}-{dgv.Columns[col].DisplayIndex}.png";
-                    cellImage.Save(System.IO.Path.Combine(filesFolder, imageFilename), System.Drawing.Imaging.ImageFormat.Png);
+                    string path = System.IO.Path.Combine(filesFolder, imageFilename);
+                    cellImage.Save(path, System.Drawing.Imaging.ImageFormat.Png);
+                    writer.Write($"<img src=\"{path}\" alt=\"{dgv.Rows[row].Cells[col].Value}\"/>");
                   }
                   catch (Exception ex)
                   {
                     Debug.Print(ex.Message);
                   }
+                } else
+                {
+                  writer.Write(dgv.Rows[row].Cells[col].Value);
                 }
               }
               else if ((dgv.Rows[row].Cells[col]) is DataGridViewImageCell)

@@ -56,7 +56,47 @@ namespace DataGridViewEx
     // The default Image Cell assumes an Image as a value, although the value of the Progress Cell is an int.
     protected override object GetFormattedValue(object value, int rowIndex, ref DataGridViewCellStyle cellStyle, TypeConverter valueTypeConverter, TypeConverter formattedValueTypeConverter, DataGridViewDataErrorContexts context)
     {
-      return emptyImage;
+      //http://onteorasoftware.azurewebsites.net/post/2006/08/05/DatagridView-ProgressBar-Column.aspx
+      if (this.RowIndex == -1) return emptyImage;
+      // Create bitmap.
+      Bitmap bmp = new Bitmap(OwningColumn.Width, OwningRow.Height);
+      
+      using (Graphics g = Graphics.FromImage(bmp))
+      {
+        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+        g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.None;
+        DataGridViewProgressColumn col = (DataGridViewProgressColumn)this.OwningColumn;
+        // Percentage.
+        double percentage = 0;
+        double.TryParse(this.Value.ToString(), out percentage);
+        string text = string.Empty;
+        if (col.DisplayText)
+        {
+          text = $"{percentage.ToString()} %";
+        }
+
+        // Get width and height of text.
+        Font f = col.DefaultCellStyle.Font != null ? col.DefaultCellStyle.Font : col.InheritedStyle.Font; //new Font("Verdana", 10, FontStyle.Regular);
+        Color c = col.DefaultCellStyle.ForeColor == Color.Empty ? col.InheritedStyle.ForeColor : col.DefaultCellStyle.ForeColor;
+        int w = (int)g.MeasureString(text, f).Width;
+        int h = (int)g.MeasureString(text, f).Height;
+
+        //TODO régler texte en gras pour l'impression
+        // Draw pile.
+        //g.DrawRectangle(new Pen(col.DefaultCellStyle.ForeColor), 2, 2, this.Size.Width - 6, this.Size.Height - 6);
+        g.FillRectangle(new SolidBrush(col.ColorProgress), 0, 0, (float)((this.Size.Width) * percentage / 100), this.Size.Height );
+
+        RectangleF rect = new RectangleF(0, 0, bmp.Width, bmp.Height);
+        StringFormat sf = new StringFormat();
+        sf.Alignment = StringAlignment.Center;
+        sf.LineAlignment = StringAlignment.Center;
+        g.DrawString(text, f, new SolidBrush(c), rect, sf);
+      }
+
+      return bmp;
+      //return emptyImage;
     }
 
     protected override void Paint(System.Drawing.Graphics g, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, DataGridViewElementStates cellState, object value, object formattedValue, string errorText, DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle,
