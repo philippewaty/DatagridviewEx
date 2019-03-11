@@ -158,6 +158,9 @@ Partial Class Form1
     DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
     Me.DataGridViewEx1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
     Me.DataGridViewEx1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+    Me.DataGridViewEx1.Configuration = "<?xml version=""1.0"" encoding=""utf-16""?>" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "<ArrayOfColumnInfo xmlns:xsi=""http://www" &
+    ".w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" />" &
+    ""
     Me.DataGridViewEx1.ContextMenuStripMergeMode = DataGridViewEx.DataGridViewEx.ContextMenuStripMergingEnum.InsideMenuOnly
     Me.DataGridViewEx1.CSVFilename = "test.csv"
     DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
@@ -174,6 +177,7 @@ Partial Class Form1
     Me.DataGridViewEx1.Location = New System.Drawing.Point(9, 10)
     Me.DataGridViewEx1.Margin = New System.Windows.Forms.Padding(2)
     Me.DataGridViewEx1.Name = "DataGridViewEx1"
+    Me.DataGridViewEx1.PrintDate = False
     Me.DataGridViewEx1.PrintTitle = Nothing
     Me.DataGridViewEx1.RowTemplate.Height = 24
     Me.DataGridViewEx1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect

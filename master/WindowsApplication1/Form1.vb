@@ -31,6 +31,7 @@
       .AddCheckBoxColumn("columnCheck", "Check")
       .AddImageColumn("columnImg", "Image", "My description", Width:=200)
       .AddProgressColumn("columnPrg", "Progression",, "progress", 150)
+      .AddButtonColumn("columnBtn", "My button", "Start")
       .ResumeLayout()
       .DataSource = lst
 
