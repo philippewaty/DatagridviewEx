@@ -174,11 +174,13 @@ namespace DataGridViewEx
           List<ColumnInfo> columns = new List<ColumnInfo>();
           for (int i = 0; i <= this.Columns.Count - 1; i++)
           {
-            ColumnInfo column = new ColumnInfo();
-            column.Name = this.Columns[i].Name;
-            column.DisplayIndex = this.Columns[i].DisplayIndex;
-            column.Width = this.Columns[i].Width;
-            column.Visible = this.Columns[i].Visible;
+            ColumnInfo column = new ColumnInfo
+            {
+              Name = this.Columns[i].Name,
+              DisplayIndex = this.Columns[i].DisplayIndex,
+              Width = this.Columns[i].Width,
+              Visible = this.Columns[i].Visible
+            };
             columns.Add(column);
           }
           //*** Serialize list<ColumnInfo>
@@ -824,9 +826,7 @@ namespace DataGridViewEx
 
     public void Print(string JobName, string Title, bool displayDate, bool Preview)
     {
-      //TODO gérer Title
-      //TODO gérer displayDate
-      printer.startPrint(this, true, true, false, Preview, JobName);
+      printer.startPrint(this, true, true, false, Preview, JobName, Title, displayDate);
     }
 
     private void InitializeComponent()
@@ -849,11 +849,11 @@ namespace DataGridViewEx
       this.ContextMenuStrip1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
       this.SuspendLayout();
-      // 
+      //
       // PrintDialog1
-      // 
+      //
       this.PrintDialog1.UseEXDialog = true;
-      // 
+      //
       // PrintDocument1
       // 
       this.PrintDocument1.BeginPrint += new System.Drawing.Printing.PrintEventHandler(this.PrintDocument1_BeginPrint);

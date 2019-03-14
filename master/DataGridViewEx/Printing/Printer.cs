@@ -23,6 +23,7 @@ namespace DataGridViewEx
     bool Landscape;
     int FromPage;
     int ToPage;
+    string printDate;
 
     public Printer()
     {
@@ -33,7 +34,7 @@ namespace DataGridViewEx
     //     * Creates a List of printed page images
     //     * both for use in the preview form and for printing
     //     
-    public List<Bitmap> getPages(DataGridView mainTable, bool includeRowHeaders, bool includeColumnHeaders, bool includeHiddenColumns, bool portrait)
+    public List<Bitmap> getPages(DataGridView mainTable, bool includeRowHeaders, bool includeColumnHeaders, bool includeHiddenColumns, bool portrait, string Title, bool displayDate)
     {
       mainTable.EndEdit();
 
@@ -50,13 +51,14 @@ namespace DataGridViewEx
       {
         //612, 792
         double sumX = (includeRowHeaders ? mainTable.RowHeadersWidth : 0);
+        int textWidth = 0;
         List<xC> xCoordinates = new List<xC>();
 
         for (int x = startColumn; x <= mainTable.ColumnCount - 1; x++)
         {
           if (!mainTable.Columns[x].Visible & !includeHiddenColumns)
           {
-            xCoordinates.Add(new xC(0, 0));
+            xCoordinates.Add(new xC(20, 20));
             continue;
           }
           if ((sumX + mainTable.Columns[x].Width) < (portrait ? 765 : 1060))
@@ -76,6 +78,22 @@ namespace DataGridViewEx
         }
 
         double sumY = (includeColumnHeaders ? mainTable.ColumnHeadersHeight : 0);
+        double titlePosY = 0;
+        int columnHeaderPosY = 0;
+        int textHeigth = 0;
+        Font titleFont = new Font(mainTable.Font.FontFamily, mainTable.Font.Size + 2, FontStyle.Bold | FontStyle.Underline);
+        if (!string.IsNullOrEmpty(Title))
+        {
+          textHeigth = TextRenderer.MeasureText(Title, titleFont).Height;
+          textWidth = TextRenderer.MeasureText(Title, titleFont).Width;
+          titlePosY = sumY;
+          if (includeColumnHeaders)
+          {
+            columnHeaderPosY = (int)(textHeigth + mainTable.ColumnHeadersHeight + 5);
+          }
+          sumY += columnHeaderPosY;
+        }
+
         List<yC> yCoordinates = new List<yC>();
 
         for (int y = startRow; y <= mainTable.RowCount - 1; y++)
@@ -110,12 +128,15 @@ namespace DataGridViewEx
         g.Clear(Color.White);
         g.TranslateTransform(20, 20);
 
+        g.DrawString(Title, titleFont, Brushes.Black, Convert.ToSingle((img.Width - textWidth) / 2) - 20, (float)titlePosY);
         // get metrics from the graphics
         //Dim metrics As SizeF = g2d.getFontMetrics(mainTable.getFont())
         //Dim height As Integer = metrics.getHeight()
-        StringFormat sf = new StringFormat();
-        sf.Alignment = StringAlignment.Near;
-        sf.LineAlignment = StringAlignment.Center;
+        StringFormat sf = new StringFormat
+        {
+          Alignment = StringAlignment.Near,
+          LineAlignment = StringAlignment.Center
+        };
 
         SolidBrush brush = new SolidBrush(mainTable.ColumnHeadersDefaultCellStyle.BackColor);
 
@@ -127,7 +148,7 @@ namespace DataGridViewEx
             {
               continue;
             }
-            Rectangle r = new Rectangle(xCoordinates[x - startColumn].X, 0, xCoordinates[x - startColumn].Width, mainTable.ColumnHeadersHeight);
+            Rectangle r = new Rectangle(xCoordinates[x - startColumn].X, columnHeaderPosY, xCoordinates[x - startColumn].Width, mainTable.ColumnHeadersHeight);
             g.FillRectangle(brush, r);
             g.DrawRectangle(Pens.DarkGray, r);
 
@@ -142,7 +163,7 @@ namespace DataGridViewEx
           {
             if (y == startRow - 1)
             {
-              Rectangle r = new Rectangle(0, 0, mainTable.RowHeadersWidth, mainTable.ColumnHeadersHeight);
+              Rectangle r = new Rectangle(0, columnHeaderPosY, mainTable.RowHeadersWidth, mainTable.ColumnHeadersHeight);
               g.FillRectangle(brush, r);
               g.DrawRectangle(Pens.DarkGray, r);
             }
@@ -389,9 +410,14 @@ namespace DataGridViewEx
           }
         }
 
-        String footer = "Page " + (pageImages.Count() + 1).ToString();
-        int textWidth = TextRenderer.MeasureText(footer, mainTable.Font).Width;
+        string footer = "Page " + (pageImages.Count() + 1).ToString();
+        textWidth = TextRenderer.MeasureText(footer, mainTable.Font).Width;
         g.DrawString(footer, mainTable.Font, Brushes.Black, Convert.ToSingle((img.Width - textWidth) / 2) - 20, Convert.ToSingle(img.Height - 85));
+
+        //*** Display date to left
+        //g.DrawString(printDate, mainTable.Font, Brushes.Black, xCoordinates[0].X, Convert.ToSingle(img.Height - 85));
+        //*** Display date to right
+        g.DrawString(printDate, mainTable.Font, Brushes.Black, img.Width - TextRenderer.MeasureText(printDate, mainTable.Font).Width - xCoordinates[0].X, Convert.ToSingle(img.Height - 85));
 
         pageImages.Add(img);
 
@@ -417,10 +443,11 @@ namespace DataGridViewEx
 
     }
 
-    public void startPrint(DataGridView mainTable, bool includeRowHeaders, bool includeColumnHeaders, bool includeHiddenColumns, bool preview, string JobName)
+    public void startPrint(DataGridView mainTable, bool includeRowHeaders, bool includeColumnHeaders, bool includeHiddenColumns, bool preview, string JobName, string Title, bool displayDate)
     {
-      portraitPages = getPages(mainTable, includeRowHeaders, includeColumnHeaders, includeHiddenColumns, true);
-      landScapePages = getPages(mainTable, includeRowHeaders, includeColumnHeaders, includeHiddenColumns, false);
+      printDate = $"{DateTime.Now.ToLongDateString()} {DateTime.Now.ToLongTimeString()}";
+      portraitPages = getPages(mainTable, includeRowHeaders, includeColumnHeaders, includeHiddenColumns, true, Title, displayDate);
+      landScapePages = getPages(mainTable, includeRowHeaders, includeColumnHeaders, includeHiddenColumns, false, Title, displayDate);
 
       document.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
       document.OriginAtMargins = true;
@@ -451,9 +478,11 @@ namespace DataGridViewEx
         if (preview)
         {
           //PrintPreviewDialog ppd = new PrintPreviewDialog();
-          CoolPrintPreview.CoolPrintPreviewDialog ppd = new CoolPrintPreview.CoolPrintPreviewDialog();
-          ppd.Document = document;
-          ppd.WindowState = FormWindowState.Maximized;
+          CoolPrintPreview.CoolPrintPreviewDialog ppd = new CoolPrintPreview.CoolPrintPreviewDialog
+          {
+            Document = document,
+            WindowState = FormWindowState.Maximized
+          };
           ppd.ShowDialog();
         }
         else

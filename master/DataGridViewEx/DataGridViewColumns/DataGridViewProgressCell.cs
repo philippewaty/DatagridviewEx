@@ -78,7 +78,7 @@ namespace DataGridViewEx
         }
 
         // Get width and height of text.
-        Font f = col.DefaultCellStyle.Font != null ? col.DefaultCellStyle.Font : col.InheritedStyle.Font; //new Font("Verdana", 10, FontStyle.Regular);
+        Font f = col.DefaultCellStyle.Font ?? col.InheritedStyle.Font; //new Font("Verdana", 10, FontStyle.Regular);
         Color c = col.DefaultCellStyle.ForeColor == Color.Empty ? col.InheritedStyle.ForeColor : col.DefaultCellStyle.ForeColor;
         int w = (int)g.MeasureString(text, f).Width;
         int h = (int)g.MeasureString(text, f).Height;
@@ -86,12 +86,14 @@ namespace DataGridViewEx
         //TODO régler texte en gras pour l'impression
         // Draw pile.
         //g.DrawRectangle(new Pen(col.DefaultCellStyle.ForeColor), 2, 2, this.Size.Width - 6, this.Size.Height - 6);
-        g.FillRectangle(new SolidBrush(col.ColorProgress), 0, 0, (float)((this.Size.Width) * percentage / 100), this.Size.Height );
+        g.FillRectangle(new SolidBrush(col.ColorProgress), 0, 0, (float)((this.Size.Width) * percentage / 100), this.Size.Height);
 
         RectangleF rect = new RectangleF(0, 0, bmp.Width, bmp.Height);
-        StringFormat sf = new StringFormat();
-        sf.Alignment = StringAlignment.Center;
-        sf.LineAlignment = StringAlignment.Center;
+        StringFormat sf = new StringFormat
+        {
+          Alignment = StringAlignment.Center,
+          LineAlignment = StringAlignment.Center
+        };
         g.DrawString(text, f, new SolidBrush(c), rect, sf);
       }
 
