@@ -47,7 +47,7 @@ namespace DataGridViewEx.Export
         if (WriteColumnHeaderNames)
         {
           //*** Export headers
-          for (int col = 0; col <= columnCount; col++)
+          for (int col = 0; col <= columnsList.Count - 1; col++)
           {
             if (!((dgv.Columns[columnsList[col]]) is DataGridViewImageColumn) | (dgv.Columns[columnsList[col]]) is DataGridViewProgressColumn)
             {
@@ -67,10 +67,10 @@ namespace DataGridViewEx.Export
         }
 
         //*** Export data
-        for (int row = 0; row <= rowsCount; row++)
+        for (int row = 0; row <= rowsCount - 1; row++)
         {
           rowData = "";
-          for (int col = 0; col <= columnCount; col++)
+          for (int col = 0; col <= columnsList.Count - 1; col++)
           {
             if (!((dgv.Columns[columnsList[col]]) is DataGridViewImageColumn) | (dgv.Columns[columnsList[col]]) is DataGridViewProgressColumn)
             {
