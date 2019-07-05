@@ -96,7 +96,7 @@
       this.lstColumns.Name = "lstColumns";
       this.lstColumns.Size = new System.Drawing.Size(225, 214);
       this.lstColumns.TabIndex = 0;
-      this.lstColumns.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.lstColumns_ItemCheck);
+      this.lstColumns.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MyCheckedListBox_MouseClick);
       // 
       // FormColumnsConfig
       // 

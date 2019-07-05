@@ -12,6 +12,7 @@ namespace DataGridViewEx
   public partial class FormColumnsConfig : Form
   {
 
+
     /// <summary>
     /// Class used to store DataGridView column info
     /// </summary>
@@ -76,18 +77,6 @@ namespace DataGridViewEx
 
     }
 
-    private void lstColumns_ItemCheck(object sender, ItemCheckEventArgs e)
-    {
-      if (_loading)
-        return;
-      if (e.Index > -1 & e.Index < lstColumns.Items.Count)
-      {
-        ItemData item = (ItemData)lstColumns.Items[e.Index];
-        _dataGridView.Columns[item.ColumnName].Visible = e.NewValue == CheckState.Checked;
-      }
-
-    }
-
     private void btnUp_Click(object sender, EventArgs e)
     {
       if (lstColumns.SelectedIndex == 0)
@@ -134,5 +123,71 @@ namespace DataGridViewEx
         lstColumns.SelectedIndex = 0;
 
     }
+
+    #region CheckBox click methods
+    //*** https://stackoverflow.com/questions/1877800/how-do-i-checkonclick-in-a-checkedlistbox-but-only-when-over-the-checkbox
+    private bool MyCheckInCheckbox = false;
+    /// <summary>
+    /// Only change the checkbox value when clicking on the box
+    /// </summary>
+    /// <value></value>
+    /// <returns></returns>
+    /// <remarks></remarks>
+    public bool CheckInCheckbox
+    {
+      get { return MyCheckInCheckbox; }
+      set { MyCheckInCheckbox = value; }
+    }
+
+    private void MyCheckedListBox_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+    {
+      int border = 1;
+      int index = lstColumns.IndexFromPoint(e.Location);
+      int idealCheckSize = 0;
+      if (CheckInCheckbox)
+      {
+        if (index != ListBox.NoMatches)
+        {
+          Rectangle bounds = lstColumns.GetItemRectangle(index);
+          if (Application.RenderWithVisualStyles)
+          {
+            System.Windows.Forms.VisualStyles.CheckBoxState cbState;
+            switch (lstColumns.GetItemCheckState(index))
+            {
+              case CheckState.Checked:
+                cbState = System.Windows.Forms.VisualStyles.CheckBoxState.CheckedNormal;
+                break;
+              case CheckState.Indeterminate:
+                cbState = System.Windows.Forms.VisualStyles.CheckBoxState.MixedNormal;
+                break;
+              case CheckState.Unchecked:
+                cbState = System.Windows.Forms.VisualStyles.CheckBoxState.UncheckedNormal;
+                break;
+              default:
+                throw new Exception("Unexpected Case");
+            }
+            Graphics g = lstColumns.CreateGraphics();
+            idealCheckSize = CheckBoxRenderer.GetGlyphSize(g, cbState).Width;
+            g.Dispose();
+          }
+          int centeringFactor = Math.Max((bounds.Height - idealCheckSize) / 2, 0);
+          if (centeringFactor + idealCheckSize > bounds.Height)
+          {
+            centeringFactor = bounds.Height - idealCheckSize;
+          }
+          Rectangle box = new Rectangle(bounds.X + border, bounds.Y + centeringFactor, idealCheckSize, idealCheckSize);
+          if (RightToLeft == System.Windows.Forms.RightToLeft.Yes)
+          {
+            box.X = bounds.X + bounds.Width - idealCheckSize - border;
+          }
+          if (!box.Contains(e.Location))
+          {
+            lstColumns.SelectedIndex = index;
+            lstColumns.SetItemChecked(index, !lstColumns.GetItemChecked(index));
+          }
+        }
+      }
+    }
+    #endregion
   }
 }

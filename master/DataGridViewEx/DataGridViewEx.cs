@@ -666,6 +666,7 @@ namespace DataGridViewEx
     {
       using (var frmConfig = new FormColumnsConfig(this))
       {
+        frmConfig.CheckInCheckbox = true;
         frmConfig.ShowDialog();
       }
     }
