@@ -187,7 +187,16 @@ namespace DataGridViewEx
           }
         }
       }
+
+      if (_loading)
+        return;
+      if (index > -1 & index < lstColumns.Items.Count)
+      {
+        ItemData item = (ItemData)lstColumns.Items[index];
+        _dataGridView.Columns[item.ColumnName].Visible = lstColumns.GetItemCheckState(index) != CheckState.Checked;
+      }
     }
     #endregion
+
   }
 }
