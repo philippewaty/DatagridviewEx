@@ -53,7 +53,10 @@ namespace DataGridViewEx.Export
         }
 
         //*** Get the columns list according to the displayIndex and visibility = true
-        List<string> columnsList = (from column in dgv.Columns.Cast<DataGridViewColumn>() where column.Visible == true orderby column.DisplayIndex select column.Name).ToList();
+        List<string> columnsList = (from column in dgv.Columns.Cast<DataGridViewColumn>()
+                                    where column.Visible == true
+                                    orderby column.DisplayIndex
+                                    select column.Name).ToList();
 
         StreamWriter writer = new StreamWriter(HTMLFilename, false, System.Text.Encoding.UTF8);
         writer.AutoFlush = true;
@@ -64,6 +67,8 @@ namespace DataGridViewEx.Export
         writer.WriteLine("        <tr>");
         foreach (string col in columnsList)
         {
+          if ((dgv.Columns[col] is DataGridViewProgressCell) && !dgv.ExportSettings.ProgressBarValue)
+            continue;
           //*** Add column text
           writer.WriteLine("          <th>{0}</th>", dgv.Columns[col].HeaderText);
         }
@@ -103,24 +108,28 @@ namespace DataGridViewEx.Export
               //TODO Générer l'image de la DataGridViewCheckBoxCell
               else if ((dgv.Rows[row].Cells[col]) is DataGridViewProgressCell)
               {
-                Image cellImage = (Image)((DataGridViewProgressCell)dgv.Rows[row].Cells[col]).FormattedValue;
-                if (cellImage != null)
+                if (dgv.ExportSettings.ProgressBarValue)
                 {
-                  try
+                  Image cellImage = (Image)((DataGridViewProgressCell)dgv.Rows[row].Cells[col]).FormattedValue;
+                  if (cellImage != null)
                   {
-                    //*** Save image to files folder
-                    string imageFilename = $"image{row}-{dgv.Columns[col].DisplayIndex}.png";
-                    string path = System.IO.Path.Combine(filesFolder, imageFilename);
-                    cellImage.Save(path, System.Drawing.Imaging.ImageFormat.Png);
-                    writer.Write($"<img src=\"{path}\" alt=\"{dgv.Rows[row].Cells[col].Value}\"/>");
+                    try
+                    {
+                      //*** Save image to files folder
+                      string imageFilename = $"image{row}-{dgv.Columns[col].DisplayIndex}.png";
+                      string path = System.IO.Path.Combine(filesFolder, imageFilename);
+                      cellImage.Save(path, System.Drawing.Imaging.ImageFormat.Png);
+                      writer.Write($"<img src=\"{path}\" alt=\"{dgv.Rows[row].Cells[col].Value}\"/>");
+                    }
+                    catch (Exception ex)
+                    {
+                      Debug.Print(ex.Message);
+                    }
                   }
-                  catch (Exception ex)
+                  else
                   {
-                    Debug.Print(ex.Message);
+                    writer.Write(dgv.Rows[row].Cells[col].Value);
                   }
-                } else
-                {
-                  writer.Write(dgv.Rows[row].Cells[col].Value);
                 }
               }
               else if ((dgv.Rows[row].Cells[col]) is DataGridViewImageCell)

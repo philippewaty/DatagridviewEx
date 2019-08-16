@@ -171,7 +171,7 @@ Partial Class Form1
     DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText
     DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
     Me.DataGridViewEx1.DefaultCellStyle = DataGridViewCellStyle2
-    ExportSettings1.ProgressBarValue = True
+    ExportSettings1.ProgressBarValue = False
     Me.DataGridViewEx1.ExportSettings = ExportSettings1
     Me.DataGridViewEx1.HTMLFilename = "export.html"
     Me.DataGridViewEx1.Location = New System.Drawing.Point(9, 10)

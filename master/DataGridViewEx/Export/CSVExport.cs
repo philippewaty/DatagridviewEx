@@ -51,6 +51,9 @@ namespace DataGridViewEx.Export
           {
             if (!((dgv.Columns[columnsList[col]]) is DataGridViewImageColumn) | (dgv.Columns[columnsList[col]]) is DataGridViewProgressColumn)
             {
+              if ((dgv.Columns[col] is DataGridViewProgressCell) && !dgv.ExportSettings.ProgressBarValue)
+                continue;
+
               //***Add text in column
               if (dgv.Columns[columnsList[col]].HeaderText.Contains(delimiter))
                 rowData += "\"" + dgv.Columns[columnsList[col]].HeaderText + "\"";

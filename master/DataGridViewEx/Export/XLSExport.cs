@@ -54,8 +54,12 @@ namespace DataGridViewEx.Export
           {
             //*** Export headers
             for (int col = 0; col <= columnsList.Count - 1; col++)
+            {
+              if ((dgv.Columns[col] is DataGridViewProgressCell) && !dgv.ExportSettings.ProgressBarValue)
+                continue;
               //*** Add column text
               ws.Cells[1, col + 1].Value = dgv.Columns[columnsList[col]].HeaderText;
+            }
             ws.Cells[1, 1, 1, columnsList.Count].AutoFilter = true;
           }
 
@@ -84,7 +88,10 @@ namespace DataGridViewEx.Export
               else if ((dgv.Rows[row].Cells[columnsList[col]]) is DataGridViewPasswordTextBoxCell)
                 ws.Cells[row + 2, col + 1].Value = dgv.Rows[row].Cells[columnsList[col]].FormattedValue.ToString();
               else if ((dgv.Rows[row].Cells[columnsList[col]]) is DataGridViewProgressCell)
-                ws.Cells[row + 2, col + 1].Value = dgv.Rows[row].Cells[columnsList[col]].Value;
+              {
+                if (dgv.ExportSettings.ProgressBarValue)
+                  ws.Cells[row + 2, col + 1].Value = dgv.Rows[row].Cells[columnsList[col]].Value;
+              }
               else if ((dgv.Rows[row].Cells[columnsList[col]]) is DataGridViewImageCell)
               {
                 //*** http://www.codeproject.com/Articles/680421/Create-Read-Edit-Advance-Excel-Report-in
