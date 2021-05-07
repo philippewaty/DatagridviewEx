@@ -74,8 +74,24 @@
       cellDate.MinDate = New Date(2015, 1, 1)
       cellDate.MaxDate = New Date(2016, 12, 31)
 
-      .ExportSettings.ProgressBarValue = False
+      .ExportSettings.ProgressBarValue = True
     End With
+
+    'DataGridViewEx1.ColumnCount = 6
+    'Dim col As Int32
+    'For teller = 0 To 5
+    '  col = teller
+    '  DataGridViewEx1.Columns(teller).HeaderText = "header" & col
+    '  DataGridViewEx1.Columns(teller).Width = 200
+    '  'DataGridViewEx1.Columns(teller).Name = "name" & col
+    'Next teller
+    'Dim row As Int32 = DataGridViewEx1.Rows.Add()
+    'DataGridViewEx1.Rows(row).Cells(0).Value = "col 0"
+    'DataGridViewEx1.Rows(row).Cells(1).Value = "col 1"
+    'DataGridViewEx1.Rows(row).Cells(2).Value = "col 2"
+    'DataGridViewEx1.Rows(row).Cells(3).Value = "col 3"
+    'DataGridViewEx1.Rows(row).Cells(4).Value = "col 4"
+    'DataGridViewEx1.Rows(row).Cells(5).Value = "col 5"
 
     If IO.File.Exists("config.xml") Then
       _configuration = IO.File.ReadAllText("config.xml")

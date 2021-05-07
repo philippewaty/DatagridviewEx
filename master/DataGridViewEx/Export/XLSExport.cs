@@ -25,7 +25,7 @@ namespace DataGridViewEx.Export
     public string ExportToXLSX(DataGridViewEx dgv, string XLSXFileName, bool WriteColumnHeaderNames = false)
     {
       int columnCount = dgv.Columns.Count - 1;
-      int rowsCount = dgv.RowCount - 1;
+      int rowsCount = dgv.RowCount;
 
       if (string.IsNullOrEmpty(XLSXFileName))
         XLSXFileName = System.IO.Path.GetTempFileName().Replace(".tmp", ".xlsx");//temp file name , not really sure 100% is unique.
@@ -40,9 +40,16 @@ namespace DataGridViewEx.Export
         if (System.IO.File.Exists(XLSXFileName))
           System.IO.File.Delete(XLSXFileName);
 
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         using (ExcelPackage pck = new ExcelPackage(new FileInfo(XLSXFileName)))
         {
           ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Sheet1");
+
+          //*** Check if the columns has name
+          for (int col = 0; col <= dgv.ColumnCount - 1; col++)
+          {
+            if (String.IsNullOrEmpty(dgv.Columns[col].Name)) dgv.Columns[col].Name = Guid.NewGuid().ToString();
+          }
 
           //*** Get the columns list according to the displayIndex and visibility = true
           List<string> columnsList = (from column in dgv.Columns.Cast<DataGridViewColumn>()

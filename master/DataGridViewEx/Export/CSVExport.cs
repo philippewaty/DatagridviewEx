@@ -70,7 +70,7 @@ namespace DataGridViewEx.Export
         }
 
         //*** Export data
-        for (int row = 0; row <= rowsCount - 1; row++)
+        for (int row = 0; row <= rowsCount; row++)
         {
           rowData = "";
           for (int col = 0; col <= columnsList.Count - 1; col++)

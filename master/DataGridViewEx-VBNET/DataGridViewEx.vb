@@ -955,7 +955,7 @@ Public Class DataGridViewEx
   End Function
 
   ''' <summary>
-  ''' Export a DataGridView to XLSX file to temporary folder
+  ''' Export a DataGridView to XLSX file to temporary folder.<br>Column name is mandatory to export to XLSX file.</br>
   ''' </summary>
   ''' <returns>Empty string if no error otherwise returns error message</returns>
   ''' <remarks></remarks>
@@ -964,7 +964,7 @@ Public Class DataGridViewEx
   End Function
 
   ''' <summary>
-  ''' Export a DataGridView to XLSX file
+  ''' Export a DataGridView to XLSX file.<br>Column name is mandatory to export to XLSX file.</br>
   ''' </summary>
   ''' <param name="XLSXFileName">XLSX file</param>
   ''' <param name="WriteColumnHeaderNames">Write header</param>
@@ -987,6 +987,7 @@ Public Class DataGridViewEx
         IO.File.Delete(XLSXFileName)
       End If
 
+      ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial
       Using pck As ExcelPackage = New ExcelPackage(New FileInfo(XLSXFileName))
         Dim ws As ExcelWorksheet = pck.Workbook.Worksheets.Add("Sheet1")
 
@@ -998,6 +999,15 @@ Public Class DataGridViewEx
         '    ws.Cells("A1").LoadFromDataTable(CType(Me.DataSource, DataTable), WriteColumnHeaderNames)
         '  End If
         'Else
+
+
+        '*** Check if the columns has name
+        For col As Integer = 0 To Me.Columns.Count - 1
+          '*** Add column text
+          If String.IsNullOrEmpty(Me.Columns(col).Name) Then
+            Me.Columns(col).Name = Guid.NewGuid.ToString
+          End If
+        Next col
 
         '*** Get the columns list according to the displayIndex and visibility = true
         Dim columnsList As List(Of String) = (From column As DataGridViewColumn In Me.Columns.Cast(Of DataGridViewColumn)()
