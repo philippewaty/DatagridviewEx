@@ -106,7 +106,9 @@ namespace DataGridViewEx.Export
                 if (cellImage != null)
                 {
                   OfficeOpenXml.Drawing.ExcelPicture excelImage;
-                  excelImage = ws.Drawings.AddPicture("imageC" + col + 1 + "R" + row + 2, cellImage);
+                  var stream = new System.IO.MemoryStream();
+                  cellImage.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                  excelImage = ws.Drawings.AddPicture("imageC" + col + 1 + "R" + row + 2, stream);
                   excelImage.From.Row = row + 1;
                   excelImage.From.Column = col;
                   excelImage.SetSize(cellImage.Width, cellImage.Height);
