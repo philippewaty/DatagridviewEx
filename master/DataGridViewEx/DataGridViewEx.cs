@@ -483,6 +483,7 @@ namespace DataGridViewEx
       col.Name = columnName;
       col.HeaderText = HeaderText;
       col.DataPropertyName = DataPropertyName;
+      col.SortMode = DataGridViewColumnSortMode.Automatic;
       if (Width != -1)
         col.Width = Width;
       if (ColumnIndex != -1)
