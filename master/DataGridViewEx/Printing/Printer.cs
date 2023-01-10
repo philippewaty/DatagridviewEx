@@ -47,6 +47,11 @@ namespace DataGridViewEx
 
       Font ulFont = new Font(mainTable.Font, mainTable.Font.Style | FontStyle.Underline);
 
+      // *** Get the columns list according to the displayIndex and visibility = true
+      List<DataGridViewColumn> columnsList = (from column in mainTable.Columns.Cast<DataGridViewColumn>()
+                                              where (column.Visible == true && column.Visible != includeHiddenColumns)
+                                              orderby column.DisplayIndex
+                                              select column).ToList();
       while (true)
       {
         //612, 792
@@ -54,18 +59,13 @@ namespace DataGridViewEx
         int textWidth = 0;
         List<xC> xCoordinates = new List<xC>();
 
-        for (int x = startColumn; x <= mainTable.ColumnCount - 1; x++)
+        for (int x = startColumn; x <= columnsList.Count - 1; x++)
         {
-          if (!mainTable.Columns[x].Visible & !includeHiddenColumns)
+          if ((sumX + columnsList[x].Width) < (portrait ? 765 : 1060))
           {
-            xCoordinates.Add(new xC(20, 20));
-            continue;
-          }
-          if ((sumX + mainTable.Columns[x].Width) < (portrait ? 765 : 1060))
-          {
-            xCoordinates.Add(new xC(Convert.ToInt32(sumX), mainTable.Columns[x].Width));
-            sumX += mainTable.Columns[x].Width;
-            if (x == mainTable.ColumnCount - 1)
+            xCoordinates.Add(new xC(Convert.ToInt32(sumX), columnsList[x].Width));
+            sumX += columnsList[x].Width;
+            if (x == columnsList.Count - 1)
             {
               lastColumn = x;
             }
@@ -144,16 +144,12 @@ namespace DataGridViewEx
         {
           for (int x = startColumn; x <= lastColumn; x++)
           {
-            if (!mainTable.Columns[x].Visible & !includeHiddenColumns)
-            {
-              continue;
-            }
             Rectangle r = new Rectangle(xCoordinates[x - startColumn].X, columnHeaderPosY, xCoordinates[x - startColumn].Width, mainTable.ColumnHeadersHeight);
             g.FillRectangle(brush, r);
             g.DrawRectangle(Pens.DarkGray, r);
 
             r.Inflate(-2, -2);
-            g.DrawString(mainTable.Columns[x].HeaderText, mainTable.Font, Brushes.Black, r, sf);
+            g.DrawString(columnsList[x].HeaderText, mainTable.Font, Brushes.Black, r, sf);
           }
         }
 
@@ -181,10 +177,6 @@ namespace DataGridViewEx
 
         for (int x = startColumn; x <= lastColumn; x++)
         {
-          if (!mainTable.Columns[x].Visible & !includeHiddenColumns)
-          {
-            continue;
-          }
           for (int y = startRow; y <= lastRow; y++)
           {
             Rectangle r = new Rectangle(xCoordinates[x - startColumn].X, yCoordinates[y - startRow].Y, xCoordinates[x - startColumn].Width, yCoordinates[y - startRow].Height);
