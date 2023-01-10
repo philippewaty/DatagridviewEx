@@ -33,8 +33,11 @@
     MyBase.InitializeEditingControl(rowIndex, initialFormattedValue, _
         dataGridViewCellStyle)
 
-    Dim ctl As CalendarEditingControl = _
+    Dim ctl As CalendarEditingControl =
         CType(DataGridView.EditingControl, CalendarEditingControl)
+    If Me.Value Is System.DBNull.Value Then
+      Me.Value = DateTime.Today
+    End If
     ctl.Value = CType(Me.Value, DateTime)
     If (MinDate > ctl.MaxDate) Then ctl.MaxDate = DateTimePicker.MaximumDateTime
     If (MinDate < DateTimePicker.MinimumDateTime) Then MinDate = DateTimePicker.MinimumDateTime
