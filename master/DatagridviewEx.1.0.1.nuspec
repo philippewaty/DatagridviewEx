@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>DatagridviewEx</id>
+    <version>1.0.1</version>
+    <authors>Philippe Waty</authors>
+    <owners></owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Datagridview extended with 
+- printpreview
+- export to CSV, Excel, HTML
+- facilities to add custome columns
+- ...</description>
+    <releaseNotes>1.0.1 Beta</releaseNotes>
+    <tags>datagridview</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.0">
+        <dependency id="EPPlus" version="4.5.3.1" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="DataGridViewEx\lib\net40\DataGridViewEx.dll" target="lib\net40\DataGridViewEx.dll" />
+    <file src="DataGridViewEx\lib\net40\DataGridViewEx.XML" target="lib\net40\DataGridViewEx.XML" />
+    <file src="DataGridViewEx\lib\net40\EPPlus.dll" target="lib\net40\EPPlus.dll" />
+    <file src="DataGridViewEx\lib\net40\EPPlus.xml" target="lib\net40\EPPlus.xml" />
+    <file src="DataGridViewEx\lib\net40\EPPlus.Interfaces.dll" target="lib\net40\EPPlus.Interfaces.dll" />
+    <file src="DataGridViewEx\lib\net40\EPPlus.System.Drawing.dll" target="lib\net40\EPPlus.System.Drawing.dll" />
+    <file src="DataGridViewEx\lib\net40\Microsoft.IO.RecyclableMemoryStream.dll" target="lib\net40\Microsoft.IO.RecyclableMemoryStream.dll" />
+  </files>
+</package>
