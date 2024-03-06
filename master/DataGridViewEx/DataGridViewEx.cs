@@ -13,6 +13,7 @@ using System.Drawing;
 using OfficeOpenXml.Style;
 using System.Data;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 
 namespace DataGridViewEx
 {
@@ -33,6 +34,7 @@ namespace DataGridViewEx
         internal ToolStripSeparator ToolStripSeparator2;
         internal ToolStripMenuItem mnuColumnSettings;
         Printer printer = new Printer();
+        internal DialogResult ConfigurationWindowValidationResult;
 
         [System.Diagnostics.DebuggerNonUserCode()]
         public DataGridViewEx()
@@ -673,13 +675,15 @@ namespace DataGridViewEx
         ///Allows you to change visibility of columns
         ///</summary>
         ///<url>http://www.extensionmethod.net/csharp/datagridview/datagridview-columns-visibility-configuration-window</url>
-        public void ShowConfigurationWindow()
+        public DialogResult ShowConfigurationWindow()
         {
+            ConfigurationWindowValidationResult = DialogResult.None;
             using (var frmConfig = new FormColumnsConfig(this))
             {
                 frmConfig.CheckInCheckbox = true;
-                frmConfig.ShowDialog();
+                ConfigurationWindowValidationResult = frmConfig.ShowDialog();
             }
+            return ConfigurationWindowValidationResult;
         }
 
         #endregion
@@ -978,6 +982,11 @@ namespace DataGridViewEx
         private void DataGridViewEx_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             return;
+        }
+
+        public DataGridViewEx Clone()
+        {
+            return (DataGridViewEx)this.MemberwiseClone();
         }
     }
 }

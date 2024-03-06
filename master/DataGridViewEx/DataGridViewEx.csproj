@@ -166,6 +166,9 @@
   <ItemGroup>
     <None Include="Resources\b.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ok.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /E /R "$(TargetDir)*.dll" "$(ProjectDir)lib\net40\"
